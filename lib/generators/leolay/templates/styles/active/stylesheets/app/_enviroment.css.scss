@@ -1,0 +1,25 @@
+//Uncomment these lines in production to have a different color
+//$env-color: rgb(250,50,50);
+//
+//@mixin primary-gradient {
+//  @include gradient(darken($env-color, 20%), darken($env-color, 33%));
+//  border-bottom: 1px solid darken($env-color, 38%);
+//}
+//
+//#header {
+//  @include primary-gradient;
+//  ul#tabs > li.current > a {
+//      background-color: darken($env-color, 15%);
+//  }
+//  ul#tabs > li:hover > a {
+//      background-color: darken($env-color, 10%);
+//  }
+//}
+//.table_tools_segmented_control li.selected {
+//  a {
+//    color: $env-color;
+//  }
+//  a:hover {
+//    color: darken($env-color, 20%);
+//  }
+//}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= "#{CONFIG[:application][:name]} #{controller.controller_name.capitalize}: #{controller.action_name}" %></title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <%= yield(:head) %>
+  </head>
+  <body class="<%= user_signed_in? ? "logged_out" : "logged_out" -%>">
+      <div id="wrapper">
+          <div id="header">
+              <div id="site_title">
+                  <h1><%= link_to CONFIG[:application][:name], root_url %> <span class="subtitle"><%= Rails.env %> <%= CONFIG[:application][:version] %></span></h1>
+              </div>
+              <div class="clear"></div>
+              <%= render 'session' %>
+              <div class="clear"></div>
+          </div>
+
+          <% if show_title? -%>
+          <div id="title_bar">
+            <div id="titlebar_left">
+              <span class="breadcrumb">
+                  <a href="/">Home</a>
+                  <span class="breadcrumb_sep">/</span>
+              </span>
+              <h2 id="page_title"><%= yield(:title) %></h2>
+            </div>
+          </div>
+          <% end -%>
+          <div id="content_wrapper">
+              <%= render 'message' %>
+              <div id="active_admin_content">
+                  <%= yield %>
+              </div>
+          </div>
+
+          <div id="footer" style="text-align: center">
+            <p><%= image_tag("logo.png") %><br />
+            <%= "#{CONFIG[:application][:name]} #{Rails.env} #{CONFIG[:application][:version]} 2012." %> </p>
+          </div>
+      </div>
+  </body>
+</html>

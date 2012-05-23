@@ -1,0 +1,23 @@
+@import "enviroment";
+
+#active_admin_content {
+  padding: 10px 10px;
+}
+.price {
+  text-align: right;
+}
+table.index_table tr.odd.selected td {
+    background: none repeat scroll 0 0 #FFFFBD;
+}
+table.index_table tr.even.selected td {
+    background: none repeat scroll 0 0 #FFFFAC;
+}
+.table_tools_segmented_control li.selected {
+  a {
+    background-color: #E6E6E6;
+    cursor: pointer;
+  }
+  a:hover {
+    color: inherit;
+  }
+}
