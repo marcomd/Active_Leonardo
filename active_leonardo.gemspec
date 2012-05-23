@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.date = "2012-05-23"
   s.summary = "This gem provides a new customized scaffold generator to combine with active admin"
   s.description = "This generator help you to create new Rails applications to combine with active admin gem. It generates application structure to easily get the internationalization and authorization."
-  s.homepage = "http://github.com/marcomd/Leonardo"
+  s.homepage = "https://github.com/marcomd/Active_Leonardo"
   s.authors = ["Marco Mastrodonato"]
   s.email = ["m.mastrodonato@gmail.com"]
   s.requirements = "Start a new app with the template.rb inside root folder"
