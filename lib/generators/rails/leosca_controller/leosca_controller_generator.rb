@@ -20,7 +20,7 @@ module Rails
       #class_option :remote, :type => :boolean, :default => true, :desc => "Enable ajax. You can also do later set remote to true into index view."
       #class_option :under, :type => :string, :default => "", :banner => "brand/category", :desc => "To nest a resource under another(s)"
       #class_option :leospace, :type => :string, :default => "", :banner => ":admin", :desc => "To nest a resource under namespace(s)"
-      class_option :auth_class, :type => :boolean, :default => 'User', :desc => "Set the authentication class name"
+      class_option :auth_class, :type => :string, :default => 'User', :desc => "Set the authentication class name"
       class_option :activeadmin, :type => :boolean, :default => true, :desc => "Add code to manage activeadmin gem"
 
       #Override
@@ -46,15 +46,11 @@ module Rails
             attributes.each do |attribute|
               content << "        #{attribute.name}: \"#{attribute.name.humanize}\"#{CRLF}"
             end
-            content << "        op_new: \"New #{singular_table_name}\"#{CRLF}"
-            content << "        op_edit: \"Editing #{singular_table_name}\"#{CRLF}"
-            content << "        op_edit_multiple: \"Editing #{plural_table_name}\"#{CRLF}"
-            content << "        op_copy: \"Creating new #{plural_table_name}\"#{CRLF}"
-            #if nested?
-            #  content << "        op_index: \"Listing #{plural_table_name} belongings to %{parent} %{name}\"#{CRLF}"
-            #else
-              content << "        op_index: \"Listing #{plural_table_name}\"#{CRLF}"
-            #end
+            #content << "        op_new: \"New #{singular_table_name}\"#{CRLF}"
+            #content << "        op_edit: \"Editing #{singular_table_name}\"#{CRLF}"
+            #content << "        op_edit_multiple: \"Editing #{plural_table_name}\"#{CRLF}"
+            #content << "        op_copy: \"Creating new #{plural_table_name}\"#{CRLF}"
+            #content << "        op_index: \"Listing #{plural_table_name}\"#{CRLF}"
             content
           end
 
@@ -91,9 +87,8 @@ module Rails
       end
 
       def update_ability_model
-        file = "app/models/ability.rb"
-        return unless File.exists?(file)
-        inject_into_file file, :before => "  end\nend" do
+        return unless authorization?
+        inject_into_file authorization_file, :before => "  end\nend" do
           <<-FILE.gsub(/^      /, '')
           #can :read, #{class_name} if #{options[:auth_class].downcase}.new_record? #Guest
           can :read, #{class_name} if #{options[:auth_class].downcase}.role? :guest #Registered guest
@@ -145,15 +140,10 @@ module Rails
           <<-FILE.gsub(/^          /, '')
 
             menu :if => proc{ can?(:read, #{class_name}) }
-            controller.authorize_resource
 
             controller do
-              # don't show prohibited actions on the index page
-              def action_methods
-                actions_abilities = {'show' => :read, 'new' => :create, 'edit' => :update, 'destroy' => :destroy}
-                prohibited_methods = actions_abilities.keys.select{|m| !can? actions_abilities[m], #{class_name}}
-                super - prohibited_methods
-              end
+              load_resource :except => :index
+              authorize_resource
             end
           FILE
         end if authorization? && File.exists?(file)

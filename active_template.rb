@@ -44,33 +44,54 @@ gem "active_leonardo"
 
 gem 'state_machine' if yes?("Do you have to handle states ?")
 
-authorization = yes?("Authorization ?")
-gem 'cancan' if authorization
-
 authentication = yes?("Authentication ?")
+model_name = authorization = nil
+if authentication
+  default_model_name = "User"
+  model_name = ask(" Insert model name: [#{default_model_name}]")
+  if model_name.empty? || model_name == 'y'
+    model_name = default_model_name
+  else
+    model_name = model_name.classify
+    stdout = <<-REMEM.gsub(/^    /, '')
+    *************************************************************************
+    Remember to add your auth class when you use active leonardo's generator.
+    For example: 
+    rails g leosca Product name price:decimal --auth_class=#{model_name}
+    *************************************************************************
+    REMEM
+    p stdout
+  end
+  
+  authorization = yes?("Authorization ?")
+  gem 'cancan' if authorization
+end
 
-#home = yes?("Generate controller home ? (raccomanded)")
-home = true
+dashboard_root = yes?("Would you use dashboard as root ? (recommended)")
+home = yes?("Ok. Would you create home controller as root ?") unless dashboard_root
 
 if yes?("Bundle install ?")
   dir = ask(" Insert folder name to install locally: [blank=default gems path]")
-  run "bundle install #{"--path=#{dir}" unless dir.empty?}"
+  run "bundle install #{"--path=#{dir}" unless dir.empty? || dir=='y'}"
 end
 
-generate "active_admin:install #{authentication ? "User" : "--skip-users"}"
+generate "active_admin:install #{authentication ? model_name : "--skip-users"}"
 
 if authorization
   generate "cancan:ability"
-  generate "migration", "AddRolesMaskToUsers", "roles_mask:integer"
+  generate "migration", "AddRolesMaskTo#{model_name}", "roles_mask:integer"
 end
 
 generate  "leolay",
             "active", #specify theme
+            "--auth_class=#{model_name}",
             (authorization ? "" : "--skip-authorization"),
-            (authentication ? "" : "--skip-authentication"),
+            (authentication ? "" : "--skip-authentication")
 
 
-if home
+if dashboard_root
+  route "root :to => 'admin/dashboard#index'"
+elsif home
   generate "controller", "home", "index"
   route "root :to => 'home#index'"
 end

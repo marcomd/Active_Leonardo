@@ -1,2 +1,12 @@
+0.0.4 (August 13th, 2012) Marco Mastrodonato
+* Now you can use any name instead of *User*
+
+0.0.3 (August 10th, 2012) Marco Mastrodonato
+* Improved cancan integration
+* Localization yaml file cleaned from some previous leonardo stuff
+
+0.0.2 (May 23th, 2012) Marco Mastrodonato
+* Minor changement
+
 0.0.1 (May 23th, 2012) Marco Mastrodonato
 * First release

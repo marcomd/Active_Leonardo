@@ -1,4 +1,8 @@
+require File.join(File.dirname(__FILE__), '../active_leonardo')
+
 class LeolayGenerator < Rails::Generators::Base
+  include ::ActiveLeonardo::Base
+
   source_root File.expand_path('../templates', __FILE__)
   argument :style, :type => :string, :default => "active"
   #class_option :pagination, :type => :boolean, :default => true, :desc => "Include pagination files"
@@ -7,7 +11,7 @@ class LeolayGenerator < Rails::Generators::Base
   class_option :authentication, :type => :boolean, :default => true, :desc => "Add code to manage authentication with devise"
   class_option :authorization, :type => :boolean, :default => true, :desc => "Add code to manage authorization with cancan"
   class_option :activeadmin, :type => :boolean, :default => true, :desc => "Add code to manage activeadmin gem"
-  class_option :auth_class, :type => :boolean, :default => 'User', :desc => "Set the authentication class name"
+  class_option :auth_class, :type => :string, :default => 'User', :desc => "Set the authentication class name"
   #class_option :formtastic, :type => :boolean, :default => true, :desc => "Copy formtastic files into leosca custom folder (inside project)"
   #class_option :jquery_ui, :type => :boolean, :default => true, :desc => "To use jQuery ui improvement"
   #class_option :rspec, :type => :boolean, :default => true, :desc => "Include custom rspec generator and custom templates"
@@ -110,6 +114,9 @@ class LeolayGenerator < Rails::Generators::Base
         rescue_from CanCan::AccessDenied do |exception|
           redirect_to root_url, :alert => exception.message
         end
+        def current_ability
+          @current_ability ||= Ability.new(current_#{options[:auth_class].downcase})
+        end
         FILE
       end if options.authorization?
 
@@ -125,7 +132,6 @@ class LeolayGenerator < Rails::Generators::Base
           end
           I18n.locale = session[:lang]
         end
-        require "upd_activeadmin"
         FILE
       end
     end
@@ -150,11 +156,11 @@ class LeolayGenerator < Rails::Generators::Base
   end
 
   def setup_authentication
-    file = "app/models/#{options.auth_class}.rb"
+    file = "app/models/#{options[:auth_class].downcase}.rb"
     #puts "File #{file} #{File.exists?(file) ? "" : "does not"} exists!"
     return unless options.authentication? and File.exists?(file)
 
-    inject_into_class file, User do
+    inject_into_class file, auth_class do
       <<-FILE.gsub(/^    /, '')
       ROLES = %w[admin manager user guest]
       scope :with_role, lambda { |role| {:conditions => "roles_mask & \#{2**ROLES.index(role.to_s)} > 0 "} }
@@ -174,6 +180,7 @@ class LeolayGenerator < Rails::Generators::Base
       def admin?
         self.role? 'admin'
       end
+      attr_accessible :roles
       FILE
     end
 
@@ -182,9 +189,10 @@ class LeolayGenerator < Rails::Generators::Base
   def setup_authorization
     file = "app/models/ability.rb"
     return unless File.exists?(file)
+    gsub_file file, /initialize(\s|\()user(.|)/, "initialize(#{options[:auth_class].downcase})"
     inject_into_file file, :before => "  end\nend" do
       <<-FILE.gsub(/^      /, '')
-          #{options[:auth_class].downcase} ||= #{options[:auth_class].classify}.new
+          #{options[:auth_class].downcase} ||= #{auth_class}.new
           can :manage, :all if #{options[:auth_class].downcase}.role? :admin
 
       FILE
@@ -196,13 +204,13 @@ class LeolayGenerator < Rails::Generators::Base
     file = "db/seeds.rb"
     append_file file do
       <<-FILE.gsub(/^      /, '')
-      user=User.new :email => 'admin@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
+      user=#{auth_class}.new :email => 'admin@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
       #{"user.roles=['admin']" if options.authorization?}
       user.save
-      user=User.new :email => 'manager@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
+      user=#{auth_class}.new :email => 'manager@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
       #{"user.roles=['manager']" if options.authorization?}
       user.save
-      user=User.new :email => 'user@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
+      user=#{auth_class}.new :email => 'user@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
       #{"user.roles=['user']" if options.authorization?}
       user.save
       FILE
@@ -338,14 +346,13 @@ class LeolayGenerator < Rails::Generators::Base
 
   def setup_extras
     copy_file "lib/upd_array.rb", "lib/extras/upd_array.rb"
-    template "lib/upd_activeadmin.rb", "lib/extras/upd_activeadmin.rb"
   end
 
   def setup_activeadmin
-    file = "config/initializers/active_admin.rb"
-    return unless options.activeadmin? and File.exists?(file)
+    return unless options.activeadmin? and activeadmin?
+    template "config/initializers/activeadmin_leonardo.rb", "config/initializers/activeadmin_leonardo.rb"
+    copy_file "config/initializers/activeadmin_cancan.rb", "config/initializers/activeadmin_cancan.rb" if options.authorization?
     template "app/admin/users.rb", "app/admin/#{options[:auth_class].downcase.pluralize}.rb"
-    template "app/views/admin/users/_form.html.erb", "app/views/admin/#{options[:auth_class].downcase.pluralize}/_form.html.erb"
 
     file = "app/assets/stylesheets/active_admin.css.scss"
     append_file file do
