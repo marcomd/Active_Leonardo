@@ -64,7 +64,10 @@ if authentication
   end
   
   authorization = yes?("Authorization ?")
-  gem 'cancan' if authorization
+  if authorization
+    gem 'cancan'
+    gem 'activeadmin-cancan'
+  end
 end
 
 dashboard_root = yes?("Would you use dashboard as root ? (recommended)")

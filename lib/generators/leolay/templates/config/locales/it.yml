@@ -244,6 +244,8 @@ it:
     change_password: "Cambia la password"
     current_password: "Password attuale"
     new_password: "Nuova password"
+  unauthorized:
+    default: "Non hai l'autorizzazione per svolgere questa operazione o per accedere a questa area"
   states:
     generic:
       new: "Nuovo"

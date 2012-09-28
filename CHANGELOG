@@ -1,3 +1,7 @@
+0.0.5 (September 26th, 2012) Marco Mastrodonato
+* Added support to activeadmin 0.0.5
+* Added cancan's unauthorized message to localization
+
 0.0.4 (August 13th, 2012) Marco Mastrodonato
 * Now you can use any name instead of *User*
 

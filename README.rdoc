@@ -1,5 +1,7 @@
 = Leolay Generators
 
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/marcomd/Active_Leonardo)
+
 A layout and customized scaffold generator for Rails 3 to combine with active admin gem
 It generates the layout, the style, the internationalization and it helps you to startup active_admin gems
 
@@ -139,7 +141,7 @@ PS: Of course, these options are in addition to those provided by the original s
 
 == Tutorial
 
-On my blog you can find some other info.
+On my [Blog]: http://marcomastrodonato.blogspot.it/ (Click to visit my blog) you can find some other info.
 
 
 

@@ -351,7 +351,7 @@ class LeolayGenerator < Rails::Generators::Base
   def setup_activeadmin
     return unless options.activeadmin? and activeadmin?
     template "config/initializers/activeadmin_leonardo.rb", "config/initializers/activeadmin_leonardo.rb"
-    copy_file "config/initializers/activeadmin_cancan.rb", "config/initializers/activeadmin_cancan.rb" if options.authorization?
+    #copy_file "config/initializers/activeadmin_cancan.rb", "config/initializers/activeadmin_cancan.rb" if options.authorization?
     template "app/admin/users.rb", "app/admin/#{options[:auth_class].downcase.pluralize}.rb"
 
     file = "app/assets/stylesheets/active_admin.css.scss"
