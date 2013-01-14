@@ -1,7 +1,9 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
 @import "enviroment";
-@import "active_admin/pages/logged_out";
+#body {
+  @import "active_admin/pages/logged_out";
+}
 
 #header {
   #session {

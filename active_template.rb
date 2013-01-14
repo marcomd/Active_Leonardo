@@ -38,11 +38,28 @@ if use_git
   EOS
 end
 
+gem "rack-mini-profiler"
+gem "turbolinks"
+gem "jquery-turbolinks"
+
 gem "activeadmin"
+gem "active_admin_editor"
 gem "meta_search"
 gem "active_leonardo"
 
-gem 'state_machine' if yes?("Do you have to handle states ?")
+rspec = yes?("Add rspec as testing framework ?")
+if rspec
+  gem 'rspec-rails', :group => [:test, :development]
+  gem 'capybara', :group => :test
+  gem 'launchy', :group => :test
+  gem 'database_cleaner', :group => :test
+  if /1.8.*/ === RUBY_VERSION
+    gem 'factory_girl', '2.6.4', :group => :test
+    gem 'factory_girl_rails', '1.7.0', :group => :test
+  else
+    gem 'factory_girl_rails', :group => :test
+  end
+end
 
 authentication = yes?("Authentication ?")
 model_name = authorization = nil
@@ -70,6 +87,8 @@ if authentication
   end
 end
 
+gem 'state_machine' if yes?("Do you have to handle states ?")
+
 dashboard_root = yes?("Would you use dashboard as root ? (recommended)")
 home = yes?("Ok. Would you create home controller as root ?") unless dashboard_root
 
@@ -78,7 +97,10 @@ if yes?("Bundle install ?")
   run "bundle install #{"--path=#{dir}" unless dir.empty? || dir=='y'}"
 end
 
+generate "rspec:install" if rspec
+
 generate "active_admin:install #{authentication ? model_name : "--skip-users"}"
+generate "active_admin:editor"
 
 if authorization
   generate "cancan:ability"
@@ -88,8 +110,9 @@ end
 generate  "leolay",
             "active", #specify theme
             "--auth_class=#{model_name}",
-            (authorization ? "" : "--skip-authorization"),
-            (authentication ? "" : "--skip-authentication")
+            (rspec ? nil : "--skip-rspec"),
+            (authorization ? nil : "--skip-authorization"),
+            (authentication ? nil : "--skip-authentication")
 
 
 if dashboard_root
@@ -106,7 +129,9 @@ rake "db:migrate"
 rake "db:seed"
 
 #rake "gems:unpack" if yes?("Unpack to vendor/gems ?")
-
-git :add => ".", :commit => "-m 'initial commit'" if use_git
+if use_git
+  git :add    => "."
+  git :commit => %Q{ -m 'Initial commit' }
+end
 
 puts "ENJOY!"

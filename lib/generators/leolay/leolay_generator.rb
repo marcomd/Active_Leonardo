@@ -14,8 +14,7 @@ class LeolayGenerator < Rails::Generators::Base
   class_option :auth_class, :type => :string, :default => 'User', :desc => "Set the authentication class name"
   #class_option :formtastic, :type => :boolean, :default => true, :desc => "Copy formtastic files into leosca custom folder (inside project)"
   #class_option :jquery_ui, :type => :boolean, :default => true, :desc => "To use jQuery ui improvement"
-  #class_option :rspec, :type => :boolean, :default => true, :desc => "Include custom rspec generator and custom templates"
-  #class_option :activeadmin, :type => :boolean, :default => true, :desc => "Include active admin management"
+  class_option :rspec, :type => :boolean, :default => true, :desc => "Include custom rspec generator and custom templates"
   #class_option :old_views, :type => :boolean, :default => false, :desc => "Include old management"
 
   #def generate_layout
@@ -83,7 +82,8 @@ class LeolayGenerator < Rails::Generators::Base
     copy_file "styles/#{style_name}/views/layout/_message.html.erb", "app/views/application/_message.html.erb"
     copy_file "styles/#{style_name}/views/layout/_session.html.erb", "app/views/application/_session.html.erb" if options.authentication?
 
-    template "config.rb", "config/initializers/config.rb"
+    copy_file "config/initializers/config.rb", "config/initializers/config.rb"
+    template "config/config.yml", "config/config.yml"
     locale_path = "config/locales"
     source_paths.each do |source_path|
       files = Dir["#{source_path}/#{locale_path}/??.yml"]
@@ -97,9 +97,9 @@ class LeolayGenerator < Rails::Generators::Base
   def setup_application
     application do
       <<-FILE.gsub(/^      /, '')
-        config.generators do |g|
+      config.generators do |g|
             g.stylesheets         false
-            g.javascripts         false
+            g.javascripts         true
             g.leosca_controller   :leosca_controller
           end
 
@@ -245,25 +245,34 @@ class LeolayGenerator < Rails::Generators::Base
   def setup_javascript
     app_path = "app/assets/javascripts"
 
-    file = "#{app_path}/custom.js"
+    file = "#{app_path}/custom.js.coffee"
     copy_file file, file
 
-    file = "#{app_path}/application.js"
-    append_file file do
-      <<-FILE.gsub(/^      /, '')
-
-      //= require custom
-      FILE
-    end
-
     file = "#{app_path}/active_admin.js"
+    gsub_file file, "//= require active_admin/base" do
+      <<-FILE.gsub(/^    /, '')
+    //= require jquery
+      //= require jquery-ui
+      //= require jquery_ujs
+      //= require turbolinks
+      //= require jquery.turbolinks
+
+      //= require active_admin/base
+    FILE
+    end
+    inject_into_file file, :before => "\n//= require active_admin/base" do
+      <<-FILE.gsub(/^      /, '')
+#{options[:auth_class].downcase} ||= #{auth_class}.new
+          can :manage, :all if #{options[:auth_class].downcase}.role? :admin
+
+      FILE
+    end
     append_file file do
       <<-FILE.gsub(/^      /, '')
 
       //= require custom
       FILE
     end
-
   end
 
   #def setup_stylesheets
@@ -299,50 +308,50 @@ class LeolayGenerator < Rails::Generators::Base
   #  end if options.formtastic?
   #end
 
-  #def setup_rspec
-  #  file = "spec/spec_helper.rb"
-  #  return unless File.exists?(file) && options.rspec?
-  #  inject_into_file file, :after => "require 'rspec/rails'" do
-  #  <<-FILE.gsub(/^    /, '')
-  #
-  #  require 'capybara/rspec'
-  #  require 'helpers/application_helpers_spec'
-  #
-  #  Capybara.default_wait_time = 10 #default=2
-  #  FILE
-  #  end
-  #
-  #  gsub_file file, 'config.fixture_path = "#{::Rails.root}/spec/fixtures"', '#config.fixture_path =  "#{::Rails.root}/spec/fixtures"'
-  #  #inject_into_file file, "#", :before => 'config.fixture_path = "#{::Rails.root}/spec/fixtures"'
-  #
-  #  gsub_file file, "config.use_transactional_fixtures = true" do
-  #  <<-FILE.gsub(/^  /, '')
-  #config.use_transactional_fixtures = false
-  #
-  #  config.before(:suite) do
-  #    DatabaseCleaner.strategy = :truncation
-  #  end
-  #
-  #  config.before(:each) do
-  #    DatabaseCleaner.start
-  #  end
-  #
-  #  config.after(:each) do
-  #    DatabaseCleaner.clean
-  #  end
-  #
-  #  config.include ApplicationHelpers
-  #  FILE
-  #  end
-  #
-  #  file = "spec/factories.rb"
-  #  copy_file file, file
-  #  file = "spec/support/devise.rb"
-  #  copy_file file, file
-  #  file = "spec/helpers/application_helpers_spec.rb"
-  #  copy_file file, file
-  #
-  #end
+  def setup_rspec
+    file = "spec/spec_helper.rb"
+    return unless File.exists?(file) && options.rspec?
+    inject_into_file file, :after => "require 'rspec/rails'" do
+    <<-FILE.gsub(/^    /, '')
+
+    require 'capybara/rspec'
+    require 'helpers/application_helpers'
+
+    Capybara.default_wait_time = 10 #default=2
+    FILE
+    end
+
+    gsub_file file, 'config.fixture_path = "#{::Rails.root}/spec/fixtures"', '#config.fixture_path =  "#{::Rails.root}/spec/fixtures"'
+    #inject_into_file file, "#", :before => 'config.fixture_path = "#{::Rails.root}/spec/fixtures"'
+
+    gsub_file file, "config.use_transactional_fixtures = true" do
+    <<-FILE.gsub(/^  /, '')
+  config.use_transactional_fixtures = false
+
+    config.before(:suite) do
+      DatabaseCleaner.strategy = :truncation
+    end
+
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
+
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
+
+    config.include ApplicationHelpers
+    FILE
+    end
+
+    file = "spec/factories.rb"
+    copy_file file, file
+    file = "spec/support/devise.rb"
+    copy_file file, file
+    file = "spec/helpers/application_helpers.rb"
+    copy_file file, file
+
+  end
 
   def setup_extras
     copy_file "lib/upd_array.rb", "lib/extras/upd_array.rb"

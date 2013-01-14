@@ -30,6 +30,7 @@ module Rails
 
       #Override
       #hook_for :template_engine, :test_framework, :as => :leosca
+      hook_for :test_framework, :as => :leosca
 
       def update_yaml_locales
         #Inject model and attributes name into yaml files for i18n
@@ -149,24 +150,24 @@ module Rails
         end if authorization? && File.exists?(file)
       end
 
-      #def update_specs
-      #  file = "spec/spec_helper.rb"
-      #  return unless File.exists? file
-      #
-      #  file = "spec/factories.rb"
-      #  inject_into_file file, :before => "  ### Insert below here other your factories ###" do
-      #    items = []
-      #    attributes.each do |attribute|
-      #      items << attribute_to_factories(attribute)
-      #    end
-      #    <<-FILE.gsub(/^        /, '')
-      #
-      #    factory :#{singular_table_name} do |#{singular_table_name[0..0]}|
-      #  #{items.join(CRLF)}
-      #    end
-      #    FILE
-      #  end if File.exists?(file)
-      #end
+      def update_specs
+        file = "spec/spec_helper.rb"
+        return unless File.exists? file
+
+        file = "spec/factories.rb"
+        inject_into_file file, :before => "  ### Insert below here other your factories ###" do
+          items = []
+          attributes.each do |attribute|
+            items << attribute_to_factories(attribute)
+          end
+          <<-FILE.gsub(/^        /, '')
+
+          factory :#{singular_table_name} do |#{singular_table_name[0..0]}|
+        #{items.join(CRLF)}
+          end
+          FILE
+        end if File.exists?(file)
+      end
 
       #def update_parent_controller
       #  return unless nested?

@@ -1,3 +1,7 @@
+0.0.6 (September 26th, 2012) Marco Mastrodonato
+* Configuration parameters moved into a yaml file (config.yml)
+* Template updated
+
 0.0.5 (September 26th, 2012) Marco Mastrodonato
 * Added support to activeadmin 0.0.5
 * Added cancan's unauthorized message to localization

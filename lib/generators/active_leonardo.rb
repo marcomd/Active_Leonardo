@@ -57,41 +57,41 @@ module ActiveLeonardo
       end
       " #{name} => #{value}"
     end
-    #def attribute_to_factories(attribute)
-    #  spaces = 34
-    #  space_association = " " * (spaces-11).abs
-    #  space_sequence = " " * (spaces-attribute.name.size-11).abs
-    #  space_other = " " * (spaces-attribute.name.size).abs
-    #  name = case attribute.type
-    #  when :references, :belongs_to   then "#{singular_table_name[0..0]}.association#{space_association}"
-    #  when :boolean, :datetime, :time, :timestamp
-    #                                  then "#{singular_table_name[0..0]}.#{attribute.name}#{space_other}"
-    #  else                                 "#{singular_table_name[0..0]}.sequence(:#{attribute.name})#{space_sequence}"
-    #  end
-    #  value = case attribute.type
-    #    when :boolean                 then "true"
-    #    when :integer                 then "{|n| n }"
-    #    when :float, :decimal         then "{|n| n }"
-    #    when :references, :belongs_to then ":#{attribute.name}"
-    #    when :date                    then "{|n| n.month.ago }"
-    #    when :datetime                then "#{Time.now.strftime("%Y-%m-%d %H:%M:%S.000")}".inspect
-    #    when :time, :timestamp        then "#{Time.now.strftime("%H:%M:%S.000")}".inspect
-    #    else                               "{|n| \"#{attribute.name.titleize}\#{n}\" }"
-    #  end
-    #  "    #{name}#{value}"
-    #end
-    #def attribute_to_requests(attribute, object_id=nil)
-    #  object_id ||= "#{singular_table_name}_#{attribute.name}"
-    #  object_id = object_id.gsub('#', "\#{#{singular_table_name}.id}").gsub('name', attribute.name)
-    #  case attribute.type
-    #    when :boolean                 then "check \"#{object_id}\" if #{singular_table_name}.#{attribute.name}"
-    #    when :references, :belongs_to then "select #{singular_table_name}.#{attribute.name}.name, :from => \"#{object_id}_id\""
-    #    when :datetime, :time, :timestamp
-    #                                  then ""
-    #    when :date                    then "fill_in \"#{object_id}\", :with => #{singular_table_name}.#{attribute.name}.strftime('%d-%m-%Y')"
-    #    else                               "fill_in \"#{object_id}\", :with => #{singular_table_name}.#{attribute.name}"
-    #  end
-    #end
+    def attribute_to_factories(attribute)
+      spaces = 34
+      space_association = " " * (spaces-11).abs
+      space_sequence = " " * (spaces-attribute.name.size-11).abs
+      space_other = " " * (spaces-attribute.name.size).abs
+      name = case attribute.type
+      when :references, :belongs_to   then "#{singular_table_name[0..0]}.association#{space_association}"
+      when :boolean, :datetime, :time, :timestamp
+                                      then "#{singular_table_name[0..0]}.#{attribute.name}#{space_other}"
+      else                                 "#{singular_table_name[0..0]}.sequence(:#{attribute.name})#{space_sequence}"
+      end
+      value = case attribute.type
+        when :boolean                 then "true"
+        when :integer                 then "{|n| n }"
+        when :float, :decimal         then "{|n| n }"
+        when :references, :belongs_to then ":#{attribute.name}"
+        when :date                    then "{|n| n.month.ago }"
+        when :datetime                then "#{Time.now.strftime("%Y-%m-%d %H:%M:%S.000")}".inspect
+        when :time, :timestamp        then "#{Time.now.strftime("%H:%M:%S.000")}".inspect
+        else                               "{|n| \"#{attribute.name.titleize}\#{n}\" }"
+      end
+      "    #{name}#{value}"
+    end
+    def attribute_to_requests(attribute, object_id=nil)
+      object_id ||= "#{singular_table_name}_#{attribute.name}"
+      object_id = object_id.gsub('#', "\#{#{singular_table_name}.id}").gsub('name', attribute.name)
+      case attribute.type
+        when :boolean                 then "check \"#{object_id}\" if #{singular_table_name}.#{attribute.name}"
+        when :references, :belongs_to then "select #{singular_table_name}.#{attribute.name}.name, :from => \"#{object_id}_id\""
+        when :datetime, :time, :timestamp
+                                      then ""
+        when :date                    then "fill_in \"#{object_id}\", :with => #{singular_table_name}.#{attribute.name}.strftime('%d-%m-%Y')"
+        else                               "fill_in \"#{object_id}\", :with => #{singular_table_name}.#{attribute.name}"
+      end
+    end
     #def attribute_to_erb(attribute, object)
     #  case attribute.name
     #  when "state"                      then "<span class=\"state generic <%= #{object}.state_name.to_s %>\"><%= t(\"states.generic.\#{#{object}.state_name.to_s}\") %></span><span style=\"display:block;\"></span>"
@@ -109,39 +109,39 @@ module ActiveLeonardo
     #    end
     #  end
     #end
-    #def get_attr_to_match(view=:list)
-    #  #attributes.each do |attribute|
-    #  #  case attribute.type
-    #  #  when :string, :text then
-    #  #    return  "have_content(#{singular_table_name}.#{attribute.name})",
-    #  #            "have_no_content(#{singular_table_name}.#{attribute.name})"
-    #  #  end
-    #  #end
-    #  attr = get_attr_to_check(view)
-    #  return  "have_content(#{singular_table_name}.#{attr})",
-    #          "have_no_content(#{singular_table_name}.#{attr})" if attr
-    #
-    #  #If there are not string or text attributes
-    #  case view
-    #  when :list
-    #    return  "have_xpath('//table/tbody/tr')", "have_no_xpath('//table/tbody/tr')"
-    #  when :show
-    #    return  "have_xpath('//table/tbody/tr')", "have_no_xpath('//table/tbody/tr')"
-    #  end
-    #end
-    #def get_attr_to_check(view=:list)
-    #  case view
-    #  when :something
-    #  else
-    #    attributes.each{|a| case a.type when :string, :text then return a.name end}
-    #    attributes.each{|a| case a.type when :references, :belongs_to, :datetime then nil else return a.name end}
-    #  end
-    #end
-    #def fill_form_with_values(object_id=nil)
-    #  items = []
-    #  attributes.each{|a|items << "        #{attribute_to_requests(a, object_id)}"}
-    #  items
-    #end
+    def get_attr_to_match(view=:list)
+      #attributes.each do |attribute|
+      #  case attribute.type
+      #  when :string, :text then
+      #    return  "have_content(#{singular_table_name}.#{attribute.name})",
+      #            "have_no_content(#{singular_table_name}.#{attribute.name})"
+      #  end
+      #end
+      attr = get_attr_to_check(view)
+      return  "have_content(#{singular_table_name}.#{attr})",
+              "have_no_content(#{singular_table_name}.#{attr})" if attr
+
+      #If there are not string or text attributes
+      case view
+      when :list
+        return  "have_xpath('//table/tbody/tr')", "have_no_xpath('//table/tbody/tr')"
+      when :show
+        return  "have_xpath('//table/tbody/tr')", "have_no_xpath('//table/tbody/tr')"
+      end
+    end
+    def get_attr_to_check(view=:list)
+      case view
+      when :something
+      else
+        attributes.each{|a| case a.type when :string, :text then return a.name end}
+        attributes.each{|a| case a.type when :references, :belongs_to, :datetime then nil else return a.name end}
+      end
+    end
+    def fill_form_with_values(object_id=nil)
+      items = []
+      attributes.each{|a|items << "        #{attribute_to_requests(a, object_id)}"}
+      items
+    end
   end
 
   #module Nested
@@ -344,4 +344,35 @@ module ActiveLeonardo
   #    end
   #  end
   #end
+  module Test
+    protected
+    def get_activespace
+      activespace ||= options[:activespace]
+      "#{activespace}_" if activespace
+    end
+
+    #product => activespace_products_path
+    def list_resources_path_test(resource=nil)
+      resource ||= plural_table_name
+      "#{get_activespace}#{resource}_path"
+    end
+
+    #product => "[:activespace, product]"
+    def show_resource_path_test(resource=nil)
+      resource ||= singular_table_name
+      "[:#{options[:activespace]}, #{resource}]"
+    end
+
+    #product => new_activespace_product_path
+    def new_resource_path_test(resource=nil)
+      resource ||= singular_table_name
+      "new_#{get_activespace}#{resource}_path"
+    end
+
+    #product => edit_activespace_product_path
+    def edit_resource_path_test(resource=nil)
+      resource ||= singular_table_name
+      "edit_#{get_activespace}#{resource}_path(#{resource})"
+    end
+  end
 end

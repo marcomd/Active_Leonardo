@@ -1,0 +1,21 @@
+defaults: &defaults
+  application:
+    name: "<%= app_name %>"
+    version: "0.0.1"
+    started_at: "<%= Time.now.strftime('%d/%m/%Y') %>"
+    updated_at: "<%= Time.now.strftime('%d/%m/%Y') %>"
+  default_style: "<%= style_name %>"
+  ldap:
+    host: "127.0.0.1"
+    port: 000
+    domain: "your domain"
+    default_pwd: "your password"
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

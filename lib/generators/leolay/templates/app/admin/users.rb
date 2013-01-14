@@ -21,6 +21,7 @@ ActiveAdmin.register <%= options[:auth_class] %> do
   end
 
   index do
+    selectable_column
     id_column
     column :email
     #column :group, :sortable => :group_id
@@ -34,6 +35,9 @@ ActiveAdmin.register <%= options[:auth_class] %> do
     column :created_at
     default_actions
   end
+
+  filter :email
+  filter :created_at
 
   form do |f|
     <%- if options.authorization? -%>
