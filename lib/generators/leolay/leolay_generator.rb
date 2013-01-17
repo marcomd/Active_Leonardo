@@ -76,7 +76,8 @@ class LeolayGenerator < Rails::Generators::Base
     template "styles/#{style_name}/stylesheets/app/_enviroment.css.scss", "app/assets/stylesheets/_enviroment.css.scss"
 
     copy_file "app/helpers/layout_helper.rb", "app/helpers/layout_helper.rb"
-    directory "styles/#{style_name}/images/style", "app/assets/images/styles/#{style_name}"
+    directory "styles/#{style_name}/images", "app/assets/images/styles/#{style_name}"
+    copy_file "styles/#{style_name}/favicon.ico", "app/assets/images/favicon.ico"
 
     copy_file "styles/#{style_name}/views/layout/application.html.erb", "app/views/layouts/application.html.erb", :force => true
     copy_file "styles/#{style_name}/views/layout/_message.html.erb", "app/views/application/_message.html.erb"
@@ -91,6 +92,15 @@ class LeolayGenerator < Rails::Generators::Base
         copy_file f, "#{locale_path}/#{File.basename(f)}"
       end
       break if files.any?
+    end
+    if options.authentication?
+      source_paths.each do |source_path|
+        files = Dir["#{source_path}/#{locale_path}/devise.??.yml"]
+        files.each do |f|
+          copy_file f, "#{locale_path}/#{File.basename(f)}"
+        end
+        break if files.any?
+      end
     end
   end
 
@@ -176,6 +186,12 @@ class LeolayGenerator < Rails::Generators::Base
       end
       def role?(role)
         roles.include? role.to_s
+      end
+      def roles?(*roles)
+        roles.each do |role|
+          return true if role? role
+        end
+        nil
       end
       def admin?
         self.role? 'admin'

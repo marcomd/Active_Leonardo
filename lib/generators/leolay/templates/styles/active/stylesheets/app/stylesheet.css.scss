@@ -1,53 +1,53 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
-@import "enviroment";
-#body {
+
+body.active_admin {
+  @import "enviroment";
   @import "active_admin/pages/logged_out";
-}
-
-#header {
-  #session {
-    display: inline-block;
-    color: #cdcdcd;
-    float: right;
-    margin-right: 20px;
-    margin-bottom: 0px;
-    padding-top: 3px;
-    font-size: 1em;
-    font-weight: normal;
+  #header {
+    #session {
+      display: inline-block;
+      color: #cdcdcd;
+      float: right;
+      margin-right: 20px;
+      margin-bottom: 0px;
+      padding-top: 3px;
+      font-size: 1em;
+      font-weight: normal;
+    }
   }
-}
-body.logged_out #content_wrapper {
-    width: 600px;
-}
-ul li {
-	list-style-type: circle;
-}
+  body.logged_out #content_wrapper {
+      width: 600px;
+  }
+  ul li {
+      list-style-type: circle;
+  }
 
-#login {
-  form {
-    input[type=text], input[type=password], input[type=email], input[type=url], input[type=tel], textarea {
-      //width: 76%;
-      //border: 1px solid #c9d0d6;
-      //@include rounded;
-      //font-size: 0.95em;
-      //@include sans-family;
-      //outline: none;
-      padding: 8px 7px;
+  #login {
+    form {
+      input[type=text], input[type=password], input[type=email], input[type=url], input[type=tel], textarea {
+        //width: 76%;
+        //border: 1px solid #c9d0d6;
+        //@include rounded;
+        //font-size: 0.95em;
+        //@include sans-family;
+        //outline: none;
+        padding: 8px 7px;
 
-      //&:focus {
-      //  border: 1px solid #99a2aa;
-      //  @include shadow(0,0,4px,#99a2aa);
+        //&:focus {
+        //  border: 1px solid #99a2aa;
+        //  @include shadow(0,0,4px,#99a2aa);
+        //}
+      }
+      input[type=submit] {
+        @include dark-button;
+        margin-left: 20px;
+        //padding: 4px 8px;
+      }
+      //.buttons {
+      //  margin-top: 15px;
+      //  //input[type=submit] { margin-right: 10px; }
       //}
     }
-    input[type=submit] {
-      @include dark-button;
-      margin-left: 20px;
-      //padding: 4px 8px;
-    }
-    //.buttons {
-    //  margin-top: 15px;
-    //  //input[type=submit] { margin-right: 10px; }
-    //}
   }
 }
