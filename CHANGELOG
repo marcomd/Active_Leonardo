@@ -1,4 +1,12 @@
-0.0.6 (September 26th, 2012) Marco Mastrodonato
+0.1.0 (February 18th, 2013) Marco Mastrodonato
+* Added alias batch_action to ability so who can update can also use batch action. Still You will need to authorize every action.
+
+0.0.7 (January 16th, 2013) Marco Mastrodonato
+* Added devise locale yaml
+* Added roles? method to authentication model (user)
+* Fixed custom active admin sass
+
+0.0.6 (January 14th, 2012) Marco Mastrodonato
 * Configuration parameters moved into a yaml file (config.yml)
 * Template updated
 

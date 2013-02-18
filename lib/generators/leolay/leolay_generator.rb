@@ -210,7 +210,7 @@ class LeolayGenerator < Rails::Generators::Base
       <<-FILE.gsub(/^      /, '')
           #{options[:auth_class].downcase} ||= #{auth_class}.new
           can :manage, :all if #{options[:auth_class].downcase}.role? :admin
-
+          alias_action :batch_action, :to => :update
       FILE
     end
   end
