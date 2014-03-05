@@ -123,6 +123,7 @@ module Rails
 
           #TODO: to have different values for every row
           content = "#{CRLF}### Created by leosca controller generator ### #{CRLF}#{class_name}.create([#{CRLF}"
+          content << "index_from = #{class_name}.first.id; index_to = #{class_name}.last.id#{CRLF}"
           options[:seeds_elements].to_i.times do |n|
             content << "#{row.gsub(/\#/, (n+1).to_s)},#{CRLF}"
           end

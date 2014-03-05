@@ -35,17 +35,21 @@ if use_git
     lib/tasks/files/*
     /*.cmd
     /*.dat
+    /config/initializers/secret_token.rb
   EOS
 end
 
 gem "rack-mini-profiler"
-gem "turbolinks"
 gem "jquery-turbolinks"
 
-gem "activeadmin"
-gem "active_admin_editor"
-gem "meta_search"
+gem "activeadmin",           git: 'https://github.com/gregbell/active_admin.git'
+use_editor = yes?("Do you want a wysihtml editor?")
+if use_editor
+  gem 'activeadmin-dragonfly', git: 'https://github.com/stefanoverna/activeadmin-dragonfly'
+  gem 'activeadmin-wysihtml5', git: 'https://github.com/stefanoverna/activeadmin-wysihtml5'
+end
 gem "active_leonardo"
+gem "bourbon"
 
 rspec = yes?("Add rspec as testing framework ?")
 if rspec
@@ -80,11 +84,15 @@ if authentication
     p stdout
   end
   
-  authorization = yes?("Authorization ?")
-  if authorization
-    gem 'cancan'
-    gem 'activeadmin-cancan'
-  end
+  #authorization = yes?("Authorization ?")
+  #if authorization
+  #  file = "config/initializers/active_admin.rb"
+  #  append_file file do
+  #    <<-FILE.gsub(/^      /, '')
+  #    config.authorization_adapter = ActiveAdmin::CanCanAdapter
+  #    FILE
+  #  end if File.exists?(file)
+  #end
 end
 
 gem 'state_machine' if yes?("Do you have to handle states ?")
@@ -100,7 +108,6 @@ end
 generate "rspec:install" if rspec
 
 generate "active_admin:install #{authentication ? model_name : "--skip-users"}"
-generate "active_admin:editor"
 
 if authorization
   generate "cancan:ability"
@@ -121,8 +128,6 @@ elsif home
   generate "controller", "home", "index"
   route "root :to => 'home#index'"
 end
-
-File.unlink "public/index.html"
 
 rake "db:create:all"
 rake "db:migrate"

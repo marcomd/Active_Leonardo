@@ -105,6 +105,7 @@ class LeolayGenerator < Rails::Generators::Base
   end
 
   def setup_application
+
     application do
       <<-FILE.gsub(/^      /, '')
       config.generators do |g|
@@ -114,6 +115,7 @@ class LeolayGenerator < Rails::Generators::Base
           end
 
           config.autoload_paths += %W(\#{config.root}/lib/extras)
+          I18n.enforce_available_locales = false
       FILE
     end
 
@@ -196,7 +198,6 @@ class LeolayGenerator < Rails::Generators::Base
       def admin?
         self.role? 'admin'
       end
-      attr_accessible :roles
       FILE
     end
 
@@ -220,6 +221,7 @@ class LeolayGenerator < Rails::Generators::Base
     file = "db/seeds.rb"
     append_file file do
       <<-FILE.gsub(/^      /, '')
+      User.delete_all if User.count == 1
       user=#{auth_class}.new :email => 'admin@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
       #{"user.roles=['admin']" if options.authorization?}
       user.save
@@ -264,29 +266,18 @@ class LeolayGenerator < Rails::Generators::Base
     file = "#{app_path}/custom.js.coffee"
     copy_file file, file
 
-    file = "#{app_path}/active_admin.js"
-    gsub_file file, "//= require active_admin/base" do
-      <<-FILE.gsub(/^    /, '')
-    //= require jquery
-      //= require jquery-ui
-      //= require jquery_ujs
-      //= require turbolinks
-      //= require jquery.turbolinks
-
-      //= require active_admin/base
-    FILE
-    end
-    inject_into_file file, :before => "\n//= require active_admin/base" do
-      <<-FILE.gsub(/^      /, '')
-#{options[:auth_class].downcase} ||= #{auth_class}.new
-          can :manage, :all if #{options[:auth_class].downcase}.role? :admin
-
-      FILE
-    end
+    file = "#{app_path}/active_admin.js.coffee"
+    #gsub_file file, "#= require active_admin/base" do
+    #  <<-FILE.gsub(/^    /, '')
+    #  #= require jquery.turbolinks
+    #
+    #  #= require active_admin/base
+    #FILE
+    #end
     append_file file do
       <<-FILE.gsub(/^      /, '')
 
-      //= require custom
+      #= require custom
       FILE
     end
   end

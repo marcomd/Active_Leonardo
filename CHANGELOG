@@ -1,3 +1,6 @@
+0.2.0 (March 5th, 2014) Marco Longhitano
+* Tested with Rails 4.0, Ruby 2.0 and ActiveAdmin 1.0.0pre
+
 0.1.0 (February 18th, 2013) Marco Mastrodonato
 * Added alias batch_action to ability so who can update can also use batch action. Still You will need to authorize every action.
 

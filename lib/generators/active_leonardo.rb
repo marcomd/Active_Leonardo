@@ -49,7 +49,7 @@ module ActiveLeonardo
         when :boolean                 then "true"
         when :integer                 then "#"
         when :float, :decimal         then "#.46"
-        when :references, :belongs_to then "#"
+        when :references, :belongs_to then "rand(index_from..index_to)"
         when :date                    then "#{Time.now.strftime("%Y-%m-%d 00:00:00.000")}".inspect
         when :datetime                then "#{Time.now.strftime("%Y-%m-%d %H:%M:%S.000")}".inspect
         when :time, :timestamp        then "#{Time.now.strftime("%H:%M:%S.000")}".inspect
