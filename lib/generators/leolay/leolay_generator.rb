@@ -212,6 +212,7 @@ class LeolayGenerator < Rails::Generators::Base
           #{options[:auth_class].downcase} ||= #{auth_class}.new
           can :manage, :all if #{options[:auth_class].downcase}.role? :admin
           alias_action :batch_action, :to => :update
+          can :read, ActiveAdmin::Page, :name => "Dashboard"
       FILE
     end
   end
@@ -221,7 +222,7 @@ class LeolayGenerator < Rails::Generators::Base
     file = "db/seeds.rb"
     append_file file do
       <<-FILE.gsub(/^      /, '')
-      User.delete_all if User.count == 1
+      #{auth_class}.delete_all if #{auth_class}.count == 1
       user=#{auth_class}.new :email => 'admin@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
       #{"user.roles=['admin']" if options.authorization?}
       user.save
@@ -368,13 +369,41 @@ class LeolayGenerator < Rails::Generators::Base
     return unless options.activeadmin? and activeadmin?
     template "config/initializers/activeadmin_leonardo.rb", "config/initializers/activeadmin_leonardo.rb"
     #copy_file "config/initializers/activeadmin_cancan.rb", "config/initializers/activeadmin_cancan.rb" if options.authorization?
-    template "app/admin/users.rb", "app/admin/#{options[:auth_class].downcase.pluralize}.rb"
+    #template "app/admin/users.rb", "app/admin/#{options[:auth_class].downcase.pluralize}.rb"
+    file = "app/admin/#{options[:auth_class].downcase}.rb"
+    inject_into_file file, :after => "ActiveAdmin.register #{options[:auth_class]} do" do
+      <<-FILE.gsub(/^      /, '')
+
+        controller do
+          def update
+            unless params[:user]['password'] && params[:user]['password'].size > 0
+              params[:user].delete 'password'
+              params[:user].delete 'password_confirmation'
+            end
+            super do
+              #do something
+            end
+          end
+        end
+      FILE
+    end
+
 
     file = "app/assets/stylesheets/active_admin.css.scss"
     append_file file do
       <<-FILE.gsub(/^      /, '')
 
       @import "custom_active_admin";
+      FILE
+    end if File.exists?(file)
+
+    file = "config/initializers/active_admin.rb"
+    gsub_file file, 'config.fixture_path = "#{::Rails.root}/spec/fixtures"', '#config.fixture_path =  "#{::Rails.root}/spec/fixtures"'
+    #inject_into_file file, "#", :before => 'config.fixture_path = "#{::Rails.root}/spec/fixtures"'
+
+    gsub_file file, "# config.authorization_adapter = ActiveAdmin::CanCanAdapter" do
+      <<-FILE.gsub(/^      /, '')
+        config.authorization_adapter = ActiveAdmin::CanCanAdapter
       FILE
     end if File.exists?(file)
   end
