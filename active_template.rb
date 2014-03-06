@@ -39,17 +39,22 @@ if use_git
   EOS
 end
 
-gem "rack-mini-profiler"
-gem "jquery-turbolinks"
-
-gem "activeadmin",           git: 'https://github.com/gregbell/active_admin.git'
-use_editor = yes?("Do you want a wysihtml editor?")
-if use_editor
-  gem 'activeadmin-dragonfly', git: 'https://github.com/stefanoverna/activeadmin-dragonfly'
-  gem 'activeadmin-wysihtml5', git: 'https://github.com/stefanoverna/activeadmin-wysihtml5'
-end
-gem "active_leonardo"
+gem "activeadmin",              git: 'http://192.30.252.131/gregbell/active_admin.git'
+gem "active_leonardo", 		      git: 'http://172.24.18.42/ErgoVita/Active_Leonardo.git', branch: 'stage'
 gem "bourbon"
+
+easy_develop = yes?("Do you want to make development easier?")
+if easy_develop
+  gem "rack-mini-profiler"
+  gem "jquery-turbolinks"
+  gem "awesome_print"
+end
+
+#use_editor = yes?("Do you want a wysihtml editor?")
+#if use_editor
+#  gem 'activeadmin-dragonfly', git: 'https://github.com/stefanoverna/activeadmin-dragonfly'
+#  gem 'activeadmin-wysihtml5', git: 'https://github.com/stefanoverna/activeadmin-wysihtml5'
+#end
 
 rspec = yes?("Add rspec as testing framework ?")
 if rspec
@@ -84,15 +89,10 @@ if authentication
     p stdout
   end
   
-  #authorization = yes?("Authorization ?")
-  #if authorization
-  #  file = "config/initializers/active_admin.rb"
-  #  append_file file do
-  #    <<-FILE.gsub(/^      /, '')
-  #    config.authorization_adapter = ActiveAdmin::CanCanAdapter
-  #    FILE
-  #  end if File.exists?(file)
-  #end
+  authorization = yes?("Authorization ?")
+  if authorization
+    gem "cancan"
+  end
 end
 
 gem 'state_machine' if yes?("Do you have to handle states ?")
@@ -135,8 +135,7 @@ rake "db:seed"
 
 #rake "gems:unpack" if yes?("Unpack to vendor/gems ?")
 if use_git
-  git :add    => "."
-  git :commit => %Q{ -m 'Initial commit' }
+  git :commit => %Q{ -a -m 'Initial commit' }
 end
 
 puts "ENJOY!"

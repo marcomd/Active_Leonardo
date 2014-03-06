@@ -53,7 +53,7 @@ ActiveAdmin.register <%= options[:auth_class] %> do
       f.input(:password_confirmation) <%= "<< input_roles.html_safe" if options.authorization? %>
           
     end
-    f.buttons
+    f.actions
   end
 
   show do
