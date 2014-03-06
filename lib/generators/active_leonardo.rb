@@ -49,13 +49,19 @@ module ActiveLeonardo
         when :boolean                 then "true"
         when :integer                 then "#"
         when :float, :decimal         then "#.46"
-        when :references, :belongs_to then "rand(index_from..index_to)"
+        when :references, :belongs_to then "rand(#{attribute.name}_from..#{attribute.name}_to)"
         when :date                    then "#{Time.now.strftime("%Y-%m-%d 00:00:00.000")}".inspect
         when :datetime                then "#{Time.now.strftime("%Y-%m-%d %H:%M:%S.000")}".inspect
         when :time, :timestamp        then "#{Time.now.strftime("%H:%M:%S.000")}".inspect
         else                               "#{attribute.name.titleize}\#".inspect
       end
       " #{name} => #{value}"
+    end
+    def attribute_to_range(attribute)
+      case attribute.type
+        when :references, :belongs_to then  "#{attribute.name}_from = #{attribute.name.classify}.first.id; #{attribute.name}_to = #{attribute.name.classify}.last.id#{CRLF}"
+        else                                ""
+      end
     end
     def attribute_to_factories(attribute)
       spaces = 34

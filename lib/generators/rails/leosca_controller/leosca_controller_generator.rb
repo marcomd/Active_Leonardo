@@ -30,20 +30,18 @@ module Rails
 
       #Override
       #hook_for :template_engine, :test_framework, :as => :leosca
-      hook_for :test_framework, :as => :leosca
 
       def update_yaml_locales
         #Inject model and attributes name into yaml files for i18n
         path = "config/locales"
-        files = []
         files = Dir["#{path}/??.yml"]
         files.each do |file|
 
           next unless File.exists?(file)
 
           #Fields name
-          inject_into_file file, :after => "#Attributes zone - do not remove#{CRLF}" do
-            content = "      #{file_name}:#{CRLF}"
+          inject_into_file file, :after => "#Attributes zone - do not remove" do
+            content = "#{CRLF}      #{file_name}:#{CRLF}"
             attributes.each do |attribute|
               content << "        #{attribute.name}: \"#{attribute.name.humanize}\"#{CRLF}"
             end
@@ -56,16 +54,17 @@ module Rails
           end
 
           #Model name
-          inject_into_file file, :after => "models: &models#{CRLF}" do
+          inject_into_file file, :after => "models: &models" do
             <<-FILE.gsub(/^      /, '')
+
             #{file_name}: "#{file_name.capitalize}"
             #{controller_name}: "#{controller_name.capitalize}"
             FILE
           end
 
           #Formtastic
-          inject_into_file file, :after => "    hints:#{CRLF}" do
-            content = "      #{file_name}:#{CRLF}"
+          inject_into_file file, :after => "    hints:" do
+            content = "#{CRLF}      #{file_name}:#{CRLF}"
             attributes.each do |attribute|
               attr_name = attribute.name.humanize
               case attribute.type
@@ -91,17 +90,12 @@ module Rails
         return unless authorization?
         inject_into_file authorization_file, :before => "  end\nend" do
           <<-FILE.gsub(/^      /, '')
-          #can :read, #{class_name} if #{options[:auth_class].downcase}.new_record? #Guest
-          can :read, #{class_name} if #{options[:auth_class].downcase}.role? :guest #Registered guest
+
+          # ----- #{class_name.upcase} ----- #
+          can :read, #{class_name} if #{options[:auth_class].downcase}.role? :guest
           if #{options[:auth_class].downcase}.role? :user
             can [:read, :create], #{class_name}
-            can [:update, :destroy], #{class_name} do |#{singular_table_name}|
-              if defined?(#{singular_table_name}.#{options[:auth_class].downcase}_id)
-                #{singular_table_name}.#{options[:auth_class].downcase}_id == #{options[:auth_class].downcase}.id
-              else
-                true
-              end
-            end
+            can [:update, :destroy], #{class_name}
           end
           if #{options[:auth_class].downcase}.role? :manager
             can [:read, :create, :update, :destroy], #{class_name}
@@ -122,8 +116,11 @@ module Rails
           row = "{ #{items.join(', ')} }"
 
           #TODO: to have different values for every row
-          content = "#{CRLF}### Created by leosca controller generator ### #{CRLF}#{class_name}.create([#{CRLF}"
-          content << "index_from = #{class_name}.first.id; index_to = #{class_name}.last.id#{CRLF}"
+          content = "#{CRLF}### Created by leosca controller generator ### #{CRLF}"
+          attributes.each do |attribute|
+            content << attribute_to_range(attribute)
+          end
+          content << "#{class_name}.create([#{CRLF}"
           options[:seeds_elements].to_i.times do |n|
             content << "#{row.gsub(/\#/, (n+1).to_s)},#{CRLF}"
           end
@@ -136,17 +133,23 @@ module Rails
         return unless activeadmin? and options[:activeadmin]
         #Rails::Generators.invoke("active_admin:resource", [singular_table_name])
         invoke "active_admin:resource", [singular_table_name]
-        file = "app/admin/#{plural_table_name}.rb"
+        file = "app/admin/#{singular_table_name}.rb"
 
         inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
           <<-FILE.gsub(/^          /, '')
 
             menu :if => proc{ can?(:read, #{class_name}) }
 
+            permit_params do
+              permitted = [#{attributes.map{|attr| ":#{attr.name}"}.join(', ')}]
+              permitted
+            end
+
             controller do
               load_resource :except => :index
-              authorize_resource
             end
+
+
           FILE
         end if authorization? && File.exists?(file)
       end

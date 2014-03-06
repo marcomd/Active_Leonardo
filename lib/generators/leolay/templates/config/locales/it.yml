@@ -254,6 +254,13 @@ it:
       canceled: "Eliminato"
       completed: "Completato"
       closed: "Chiuso"
+  views:
+    pagination:
+      next: "Succ."
+      previous: "Prec."
+      first: "Primo"
+      last: "Ultimo"
+      truncate: "..."
 
   unknown_request: "Spiacente, richiesta sconosciuta, non è possibile eseguirla"
   generic_error: "Un errore impedisce di svolgere questa operazione"
