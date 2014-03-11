@@ -1,3 +1,8 @@
+0.2.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.0...v0.2.1) March 11th, 2014
+------------------------------
+* Turbolinks now working with ActiveAdmin
+* Git initial commit fixed (now double quoted comment)
+
 0.2.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.1.0...v0.2.0) March 6th, 2014
 ------------------------------
 * Tested with Rails 4.0, Ruby 2.0 and ActiveAdmin 1.0.0pre

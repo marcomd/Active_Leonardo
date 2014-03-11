@@ -277,7 +277,7 @@ class LeolayGenerator < Rails::Generators::Base
     #end
     append_file file do
       <<-FILE.gsub(/^      /, '')
-
+      #= require turbolinks
       #= require custom
       FILE
     end

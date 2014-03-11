@@ -1,7 +1,8 @@
 #########################################################
-# 2012 Marco Mastrodonato(c)
-# This is a Rails 3.1+ template to use with activeleonardo gem
-# https://rubygems.org/gems/Activeleonardo
+# 2014 Marco Mastrodonato(c)
+# This is a Rails 4.0 template to use with activeleonardo gem
+# https://rubygems.org/gems/active_leonardo
+# https://github.com/marcomd/Active_Leonardo
 # 
 # USAGE: rails new yourappname -m active_template.rb
 # 
@@ -39,21 +40,22 @@ if use_git
   EOS
 end
 
-gem "activeadmin",              git: 'http://192.30.252.131/gregbell/active_admin.git'
-gem "active_leonardo", 		      git: 'http://172.24.18.42/ErgoVita/Active_Leonardo.git', branch: 'stage'
+gem "activeadmin",              git: 'http://github.com/gregbell/active_admin.git'
+gem "active_leonardo"
+gem "jquery-turbolinks"
 gem "bourbon"
 
 easy_develop = yes?("Do you want to make development easier?")
 if easy_develop
-  gem "rack-mini-profiler"
-  gem "jquery-turbolinks"
-  gem "awesome_print"
+  gem "rack-mini-profiler", :group => :development
+  gem "better_errors", :group => :development
+  gem "awesome_print", :group => :development
 end
 
 #use_editor = yes?("Do you want a wysihtml editor?")
 #if use_editor
-#  gem 'activeadmin-dragonfly', git: 'https://github.com/stefanoverna/activeadmin-dragonfly'
-#  gem 'activeadmin-wysihtml5', git: 'https://github.com/stefanoverna/activeadmin-wysihtml5'
+#  gem 'activeadmin-dragonfly',  git: 'http://192.30.252.131/stefanoverna/activeadmin-dragonfly'
+#  gem 'activeadmin-wysihtml5',  git: 'http://192.30.252.131/stefanoverna/activeadmin-wysihtml5'
 #end
 
 rspec = yes?("Add rspec as testing framework ?")
@@ -88,7 +90,7 @@ if authentication
     REMEM
     p stdout
   end
-  
+
   authorization = yes?("Authorization ?")
   if authorization
     gem "cancan"
@@ -115,11 +117,11 @@ if authorization
 end
 
 generate  "leolay",
-            "active", #specify theme
-            "--auth_class=#{model_name}",
-            (rspec ? nil : "--skip-rspec"),
-            (authorization ? nil : "--skip-authorization"),
-            (authentication ? nil : "--skip-authentication")
+          "active", #specify theme
+          "--auth_class=#{model_name}",
+          (rspec ? nil : "--skip-rspec"),
+          (authorization ? nil : "--skip-authorization"),
+          (authentication ? nil : "--skip-authentication")
 
 
 if dashboard_root
@@ -135,7 +137,8 @@ rake "db:seed"
 
 #rake "gems:unpack" if yes?("Unpack to vendor/gems ?")
 if use_git
-  git :commit => %Q{ -a -m 'Initial commit' }
+  git :add => "."
+  git :commit => %Q{ -m "Initial commit" }
 end
 
 puts "ENJOY!"
