@@ -58,6 +58,19 @@ end
 #  gem 'activeadmin-wysihtml5',  git: 'http://192.30.252.131/stefanoverna/activeadmin-wysihtml5'
 #end
 
+easy_develop = yes?("Do you want to make development easier?")
+if easy_develop
+  gem "rack-mini-profiler"
+  gem "jquery-turbolinks"
+  gem "awesome_print"
+end
+
+#use_editor = yes?("Do you want a wysihtml editor?")
+#if use_editor
+#  gem 'activeadmin-dragonfly', git: 'https://github.com/stefanoverna/activeadmin-dragonfly'
+#  gem 'activeadmin-wysihtml5', git: 'https://github.com/stefanoverna/activeadmin-wysihtml5'
+#end
+
 rspec = yes?("Add rspec as testing framework ?")
 if rspec
   gem 'rspec-rails', :group => [:test, :development]
@@ -91,7 +104,7 @@ if authentication
     p stdout
   end
 
-  authorization = yes?("Authorization ?")
+authorization = yes?("Authorization ?")
   if authorization
     gem "cancan"
   end
