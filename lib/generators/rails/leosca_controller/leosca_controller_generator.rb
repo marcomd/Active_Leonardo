@@ -9,19 +9,16 @@ module Rails
     class LeoscaControllerGenerator < ::Rails::Generators::ScaffoldControllerGenerator
       include ::ActiveLeonardo::Base
       include ::ActiveLeonardo::Leosca
-      #include ::Leonardo::Nested
-      #include ::Leonardo::Nested::Test
-      #puts 'rails:leosca_controller'
 
       source_root File.expand_path('../templates', __FILE__)
-      argument :attributes, :type => :array, :default => [], :banner => "field:type field:type"
-      class_option :seeds, :type => :boolean, :default => true, :desc => "Create seeds to run with rake db:seed"
-      class_option :seeds_elements, :type => :string, :default => "30", :desc => "Choose seeds elements", :banner => "NUMBER"
-      #class_option :remote, :type => :boolean, :default => true, :desc => "Enable ajax. You can also do later set remote to true into index view."
-      #class_option :under, :type => :string, :default => "", :banner => "brand/category", :desc => "To nest a resource under another(s)"
-      #class_option :leospace, :type => :string, :default => "", :banner => ":admin", :desc => "To nest a resource under namespace(s)"
-      class_option :auth_class, :type => :string, :default => 'User', :desc => "Set the authentication class name"
-      class_option :activeadmin, :type => :boolean, :default => true, :desc => "Add code to manage activeadmin gem"
+      argument :attributes,         :type => :array,    :default => [],     :banner => "field:type field:type"
+      class_option :seeds,          :type => :boolean,  :default => true,                                       :desc => "Create seeds to run with rake db:seed"
+      class_option :seeds_elements, :type => :string,   :default => "30",   :banner => "NUMBER",                :desc => "Choose seeds elements"
+      #class_option :remote,        :type => :boolean,  :default => true,                                       :desc => "Enable ajax. You can also do later set remote to true into index view."
+      #class_option :under,         :type => :string,   :default => "",     :banner => "brand/category",        :desc => "To nest a resource under another(s)"
+      #class_option :leospace,      :type => :string,   :default => "",     :banner => ":admin",                :desc => "To nest a resource under namespace(s)"
+      class_option :auth_class,     :type => :string,   :default => 'User',                                     :desc => "Set the authentication class name"
+      class_option :activeadmin,    :type => :boolean,  :default => true,                                       :desc => "Add code to manage activeadmin gem"
 
       #Override
       def create_controller_files

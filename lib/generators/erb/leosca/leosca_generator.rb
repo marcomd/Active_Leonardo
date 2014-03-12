@@ -10,12 +10,12 @@ module Erb
       #puts 'erb:leosca'
 
       source_root File.expand_path('../templates', __FILE__)
-      class_option :authorization, :type => :boolean, :default => true, :description => "Add code to manage authorization with cancan"
-      #class_option :remote, :type => :boolean, :default => true, :description => "Enable ajax. You can also do later set remote to true into index view."
-      #class_option :formtastic, :type => :boolean, :default => true, :description => "Create forms to manage with formtastic gem"
-      #class_option :under, :type => :string, :default => "", :banner => "brand/category", :desc => "To nest a resource under another(s)"
-      #class_option :leospace, :type => :string, :default => "", :banner => ":admin", :desc => "To nest a resource under namespace(s)"
-      class_option :auth_class, :type => :boolean, :default => 'user', :desc => "Set the authentication class name"
+      class_option :authorization,  :type => :boolean, :default => true,                                :desc => "Add code to manage authorization with cancan"
+      class_option :auth_class,     :type => :boolean, :default => 'user',                              :desc => "Set the authentication class name"
+      #class_option :remote,        :type => :boolean, :default => true,                                :desc => "Enable ajax. You can also do later set remote to true into index view."
+      #class_option :formtastic,    :type => :boolean, :default => true,                                :desc => "Create forms to manage with formtastic gem"
+      #class_option :under,         :type => :string,  :default => "",    :banner => "brand/category",  :desc => "To nest a resource under another(s)"
+      #class_option :leospace,      :type => :string,  :default => "",    :banner => ":admin",          :desc => "To nest a resource under namespace(s)"
 
       #override
       #def copy_view_files

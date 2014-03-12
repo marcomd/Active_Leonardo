@@ -1,0 +1,14 @@
+language: ruby
+install:
+  - bundle install --path=mybundle
+script:
+  - git config --global user.email "test@activeleonardo.com"
+  - git config --global user.name "Test User"
+  - rake active:tests:newapp
+env:
+  - CI_RAILS=3.2
+  - CI_RAILS=4.0
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.1

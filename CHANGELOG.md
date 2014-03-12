@@ -1,3 +1,8 @@
+0.2.2.pre [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.1...v0.2.2) March 12th, 2014
+------------------------------
+* Added suite test
+* Travis integration
+
 0.2.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.0...v0.2.1) March 11th, 2014
 ------------------------------
 * Turbolinks now working with ActiveAdmin
