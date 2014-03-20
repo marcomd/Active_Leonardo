@@ -3,3 +3,4 @@
 bin/*.gem
 .git
 *.cmd
+test/*

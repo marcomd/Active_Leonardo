@@ -1,6 +1,7 @@
 # Leolay Generators
 
-[![Version     ](http://img.shields.io/gem/v/active_leonardo.svg)                       ](https://rubygems.org/gems/active_leonardo)
+[![Version     ](http://img.shields.io/gem/v/active_leonardo.svg)                     ](https://rubygems.org/gems/active_leonardo)
+[![Travis CI   ](http://img.shields.io/travis/marcomd/Active_Leonardo/master.svg)     ](https://travis-ci.org/marcomd/Active_Leonardo)
 [![Quality     ](http://img.shields.io/codeclimate/github/marcomd/Active_Leonardo.svg)](https://codeclimate.com/github/marcomd/Active_Leonardo)
 
 A layout and customized scaffold generator for Rails to combine with active admin gem
