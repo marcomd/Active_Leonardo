@@ -4,3 +4,6 @@ bin/*.gem
 .git
 *.cmd
 test/*
+mybundle*
+.bundle
+Gemfile.lock

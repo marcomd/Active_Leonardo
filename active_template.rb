@@ -16,7 +16,8 @@ puts '*' * 40
 
 test_mode = nil
 ARGV.each{|arg| test_mode = true if arg  == "test_mode"}
-puts "**** Starting in test mode! ****" if test_mode
+app_path = ARGV[0]
+puts "**** Starting app into #{app_path} in test mode! ****" if test_mode
 
 use_git = test_mode || yes?("Do you use git ?")
 
@@ -47,7 +48,11 @@ if use_git
 end
 
 gem "activeadmin",              git: 'http://github.com/gregbell/active_admin.git'
-gem "active_leonardo"
+if test_mode
+  gem "active_leonardo", :path => "../../."
+else
+  gem "active_leonardo"
+end
 gem "jquery-turbolinks"
 gem "bourbon"
 

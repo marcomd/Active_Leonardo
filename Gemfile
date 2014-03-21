@@ -9,7 +9,7 @@ case ENV['CI_RAILS']
     gem 'coffee-rails', '~> 4.0.0'
     gem 'sass-rails', '~> 4.0.0'
   else
-    gem 'rails', '4.0.3'
+    gem 'rails'
     gem 'coffee-rails'
     gem 'sass-rails'
 end

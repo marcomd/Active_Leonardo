@@ -9,6 +9,9 @@ module Rails
     class LeoscaControllerGenerator < ::Rails::Generators::ScaffoldControllerGenerator
       include ::ActiveLeonardo::Base
       include ::ActiveLeonardo::Leosca
+      include ::ActiveLeonardo::Leosca::Locale
+      include ::ActiveLeonardo::Leosca::Rspec
+      include ::ActiveLeonardo::Leosca::Seed
 
       source_root File.expand_path('../templates', __FILE__)
       argument :attributes,         :type => :array,    :default => [],     :banner => "field:type field:type"
@@ -38,16 +41,7 @@ module Rails
 
           #Fields name
           inject_into_file file, :after => "#Attributes zone - do not remove" do
-            content = "#{CRLF}      #{file_name}:#{CRLF}"
-            attributes.each do |attribute|
-              content << "        #{attribute.name}: \"#{attribute.name.humanize}\"#{CRLF}"
-            end
-            #content << "        op_new: \"New #{singular_table_name}\"#{CRLF}"
-            #content << "        op_edit: \"Editing #{singular_table_name}\"#{CRLF}"
-            #content << "        op_edit_multiple: \"Editing #{plural_table_name}\"#{CRLF}"
-            #content << "        op_copy: \"Creating new #{plural_table_name}\"#{CRLF}"
-            #content << "        op_index: \"Listing #{plural_table_name}\"#{CRLF}"
-            content
+            attributes_to_list(attributes, file_name)
           end
 
           #Model name
@@ -61,23 +55,7 @@ module Rails
 
           #Formtastic
           inject_into_file file, :after => "    hints:" do
-            content = "#{CRLF}      #{file_name}:#{CRLF}"
-            attributes.each do |attribute|
-              attr_name = attribute.name.humanize
-              case attribute.type
-              when :integer, :decimal, :float
-                content << "        #{attribute.name}: \"Fill the #{attr_name} with a#{"n" if attribute.type == :integer} #{attribute.type.to_s} number\"#{CRLF}"
-              when :boolean
-                content << "        #{attribute.name}: \"Select if this #{file_name} should be #{attr_name} or not\"#{CRLF}"
-              when :string, :text
-                content << "        #{attribute.name}: \"Choose a good #{attr_name} for this #{file_name}\"#{CRLF}"
-              when :date, :datetime, :time, :timestamp
-                content << "        #{attribute.name}: \"Choose a #{attribute.type.to_s} for #{attr_name}\"#{CRLF}"
-              else
-                content << "        #{attribute.name}: \"Choose a #{attr_name}\"#{CRLF}"
-              end
-            end
-            content
+            attributes_to_hints(attributes, file_name)
           end
 
         end
@@ -107,15 +85,14 @@ module Rails
         file = "db/seeds.rb"
         append_file file do
           items = []
-          attributes.each do |attribute|
-            items << attribute_to_hash(attribute)
-          end
+          attributes.each{|attribute| items << attribute_to_hash(attribute)}
           row = "{ #{items.join(', ')} }"
 
           #TODO: to have different values for every row
           content = "#{CRLF}### Created by leosca controller generator ### #{CRLF}"
-          attributes.each do |attribute|
-            content << attribute_to_range(attribute)
+          attributes.each{|attribute| content << attribute_to_range(attribute)}
+          if /^3./ === Rails.version
+            content << attributes_accessible(attributes, class_name)
           end
           content << "#{class_name}.create([#{CRLF}"
           options[:seeds_elements].to_i.times do |n|
@@ -132,15 +109,23 @@ module Rails
         invoke "active_admin:resource", [singular_table_name]
         file = "app/admin/#{singular_table_name}.rb"
 
+        if /^4./ === Rails.version
+          inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
+            <<-FILE.gsub(/^            /, '')
+
+              permit_params do
+                permitted = [#{attributes.map{|attr| ":#{attr.name}"}.join(', ')}]
+                permitted
+              end
+
+            FILE
+          end
+        end
+
         inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
           <<-FILE.gsub(/^          /, '')
 
             menu :if => proc{ can?(:read, #{class_name}) }
-
-            permit_params do
-              permitted = [#{attributes.map{|attr| ":#{attr.name}"}.join(', ')}]
-              permitted
-            end
 
             controller do
               load_resource :except => :index
@@ -149,6 +134,7 @@ module Rails
 
           FILE
         end if authorization? && File.exists?(file)
+
       end
 
       def update_specs

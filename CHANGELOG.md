@@ -1,4 +1,9 @@
-0.2.2.pre [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.1...v0.2.2) March 12th, 2014
+0.2.3 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.2...v0.2.3) March 21th, 2014
+------------------------------
+* Improved rake test to iterate several rails versions (currently 3.2.x and 4.0.x)
+* Code improvements
+
+0.2.2 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.1...v0.2.2) March 12th, 2014
 ------------------------------
 * Added suite test
 * Travis integration
