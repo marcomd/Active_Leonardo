@@ -174,16 +174,10 @@ class LeolayGenerator < Rails::Generators::Base
     copy_file file, file, :force => !options.verbose?
 
     file = "#{app_path}/active_admin.js.coffee"
-    #gsub_file file, "#= require active_admin/base" do
-    #  <<-FILE.gsub(/^    /, '')
-    #  #= require jquery.turbolinks
-    #
-    #  #= require active_admin/base
-    #FILE
-    #end
     append_file file do
       <<-FILE.gsub(/^      /, '')
       #= require turbolinks
+      #= require jquery.turbolinks
       #= require custom
       FILE
     end

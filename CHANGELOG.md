@@ -1,3 +1,9 @@
+0.3.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.3...v0.3.0) April 8th, 2014
+------------------------------
+* New, edit and destroy buttons are now shown only if authorized
+* The activeadmin method "default_actions" now show only authorized links
+* Turned on turbolinks by default. You can remove jquery.turbolinks from active_admin.js.coffee
+
 0.2.3 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.2...v0.2.3) March 21th, 2014
 ------------------------------
 * Improved rake test to iterate several rails versions (currently 3.2.x and 4.0.x)

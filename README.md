@@ -9,7 +9,20 @@ It generates the layout, the style, the internationalization and it helps you to
 
 ## Compatibility
 
-This version has been tested on Rails 4.0.x and Ruby 2.0 on Windows OS
+This version has been tested on:
+
+* Rails `3.2.x` and Ruby `1.9.3` on Windows OS
+* Rails `3.2.x` and Ruby `2.0.x` on Windows OS
+* Rails `4.0.x` and Ruby `1.9.x` on Windows OS
+* Rails `4.0.x` and Ruby `2.0.x` on Windows OS
+* Rails `3.2.x` and Ruby `1.9.3` on Linux
+* Rails `3.2.x` and Ruby `2.0.x` on Linux
+* Rails `3.2.x` and Ruby `2.1.x` on Linux
+* Rails `4.0.x` and Ruby `1.9.3` on Linux
+* Rails `4.0.x` and Ruby `2.0.x` on Linux
+* Rails `4.0.x` and Ruby `2.1.x` on Linux
+
+We are pleased to have achieved this result :smile:
 
 
 ## Install
@@ -152,7 +165,7 @@ Currently the only one available is provided by ActiveAdmin
 
 ## Tutorial
 
-On my [Blog](http://marcomastrodonato.blogspot.it/) you can find some other info.
+On my [Blog](http://mastrodonato.it/) you can find some other info.
 
 
 ## Found a bug?
