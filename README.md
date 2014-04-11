@@ -163,6 +163,51 @@ Currently the only one available is provided by ActiveAdmin
 * active [default]
 
 
+## How to perform tests
+
+Check current tasks typing:
+
+```ruby
+bundle exec rake -T
+```
+
+    rake active:tests:all[inspection]           # Tests all rails versions
+    rake active:tests:newapp[inspection,rails]  # Creates a test rails app for ...
+    rake active:tests:prepare[rails,path]       # Prepare the environment passi...
+
+if you want to test all, you can entrust to our package:
+```ruby
+bundle exec rake active:tests:all[inspection]
+```
+
+if you pass the argument inspection you can check the application under the test folder:
+
+    test/TestApp_xxx_32
+    test/TestApp_xxx_40
+
+where xxx is the current ruby version and the last number the rails version.
+
+Every rails version has its own bundle under mybundle_xx folder.
+
+If you want to perform a custom test, firstly make sure Gemfile.lock is not present otherwise delete it
+then you can type:
+
+```ruby
+bundle exec active:tests:prepare['3.2','mybundle_path']
+```
+
+_It sets the variable ENV[RAILS_CI] and prepares the package in the specified path_
+
+```ruby
+bundle exec rake active:tests:newapp[inspection]
+```
+
+the rails version has already been set by "active:tests:prepare" task.
+
+
+If you execute tests with the inspection parameter remember to delete app folder under test/ before perform a new execution.
+
+
 ## Tutorial
 
 On my [Blog](http://mastrodonato.it/) you can find some other info.

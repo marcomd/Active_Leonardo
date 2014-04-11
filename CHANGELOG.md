@@ -1,3 +1,9 @@
+0.4.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.3.0...v0.4.0) April 11th, 2014
+------------------------------
+* Rails 4.1 passed
+* Improved rake tests, now active:tests:all perform test from rails 3.2 to 4.1
+* Added Rails 4.1 tests to Travis CI
+
 0.3.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.2.3...v0.3.0) April 8th, 2014
 ------------------------------
 * New, edit and destroy buttons are now shown only if authorized

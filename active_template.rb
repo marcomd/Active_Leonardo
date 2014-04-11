@@ -10,13 +10,15 @@
 #
 #########################################################
 
+rails_version = Rails::VERSION::STRING
+
 puts '*' * 40
-puts "* Processing template..."
+puts "* Rails #{rails_version} Processing template..."
 puts '*' * 40
 
 test_mode = nil
 ARGV.each{|arg| test_mode = true if arg  == "test_mode"}
-app_path = ARGV[0]
+app_path = ARGV[1]
 puts "**** Starting app into #{app_path} in test mode! ****" if test_mode
 
 use_git = test_mode || yes?("Do you use git ?")
@@ -47,9 +49,10 @@ if use_git
   EOS
 end
 
-gem "activeadmin",              git: 'http://github.com/gregbell/active_admin.git'
+
+gem "activeadmin",          git: 'http://github.com/gregbell/active_admin.git'
 if test_mode
-  gem "active_leonardo", :path => "../../."
+  gem "active_leonardo",    path: "../../."
 else
   gem "active_leonardo"
 end
@@ -58,9 +61,9 @@ gem "bourbon"
 
 easy_develop = test_mode || yes?("Do you want to make development easier?")
 if easy_develop
-  gem "rack-mini-profiler", :group => :development
-  gem "better_errors",      :group => :development
-  gem "awesome_print",      :group => :development
+  gem "rack-mini-profiler", group: :development
+  gem "better_errors",      group: :development
+  gem "awesome_print",      group: :development
 end
 
 #use_editor = yes?("Do you want a wysihtml editor?")
@@ -71,16 +74,11 @@ end
 
 rspec = test_mode || yes?("Add rspec as testing framework ?")
 if rspec
-  gem 'rspec-rails',                    :group => [:test, :development]
-  gem 'capybara',                       :group => :test
-  gem 'launchy',                        :group => :test
-  gem 'database_cleaner',               :group => :test
-  if /1.8.*/ === RUBY_VERSION
-    gem 'factory_girl', '2.6.4',        :group => :test
-    gem 'factory_girl_rails', '1.7.0',  :group => :test
-  else
-    gem 'factory_girl_rails',           :group => :test
-  end
+  gem 'rspec-rails',                    group: [:test, :development]
+  gem 'capybara',                       group: :test
+  gem 'launchy',                        group: :test
+  gem 'database_cleaner',               group: :test
+  gem 'factory_girl_rails',             group: :test
 end
 
 authentication = test_mode || yes?("Authentication ?")
@@ -110,6 +108,12 @@ end
 
 gem 'state_machine' if test_mode || yes?("Do you have to handle states ?")
 
+# Updates for Rails 4.1
+if /4.1.*/ === rails_version
+  gem 'ransack',            git: 'http://github.com/activerecord-hackery/ransack.git',     branch: 'rails-4.1'
+  gem 'polyamorous',        git: 'http://github.com/activerecord-hackery/polyamorous.git'
+end
+
 dashboard_root = test_mode || yes?("Would you use dashboard as root ? (recommended)")
 home = test_mode || yes?("Ok. Would you create home controller as root ?") unless dashboard_root
 
@@ -130,10 +134,10 @@ end
 generate  "leolay",
           "active", #specify theme
           "--auth_class=#{model_name}",
-          (rspec ? nil : "--skip-rspec"),
-          (authorization ? nil : "--skip-authorization"),
-          (authentication ? nil : "--skip-authentication"),
-          (test_mode ? "--no-verbose" : nil)
+          (rspec ?                  nil : "--skip-rspec"),
+          (authorization ?          nil : "--skip-authorization"),
+          (authentication ?         nil : "--skip-authentication"),
+          (test_mode ?  "--no-verbose"  : nil)
 
 
 if dashboard_root

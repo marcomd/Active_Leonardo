@@ -29,7 +29,9 @@ namespace :active do
 
         app_name = "TestApp_#{RUBY_VERSION.gsub(/\./,"")}_#{rails_version.gsub(/\./,"")}"
 
-        commands = [
+        commands = []
+        commands << "delete #{File.join(test_folder,app_name)}"
+        commands.concat [
             "bundle exec rails new #{test_folder}/#{app_name} -m active_template.rb test_mode",
             [File.join(test_folder,app_name), "bundle install --path=mybundle",
                                               "bundle exec rails g leosca discussion name body:text",
@@ -49,7 +51,8 @@ namespace :active do
               end
             end
           elsif command.include? "delete"
-            FileUtils.rm_rf command.match(/delete\s(.+)/)[1]
+            what = command.match(/delete\s(.+)/)[1]
+            FileUtils.rm_rf what if File.exists? what
           else
             raise "Failed: #{command}" unless system("#{command} ") #>> #{log_path}
           end
@@ -62,9 +65,14 @@ namespace :active do
 
     desc "Tests all rails versions"
     task(:all, [:inspection]) do  |task_name, args|
-      ['3.2', '4.0'].each do |rails_version|
-        Rake::Task["active:tests:prepare"].invoke(rails_version, "mybundle_#{rails_version.gsub(/\./,"")}")
-        Rake::Task["active:tests:newapp"].invoke('inspection')
+      rails_versions = %w(3.2 4.0 4.1)
+      puts "Rails versions to test: #{rails_versions.join(', ')}"
+      rails_versions.each do |rails_version|
+        puts "--- Start test with rails #{rails_version} ---"
+        %w(Gemfile.lock).each{|file| File.delete file if File.exist? file}
+        Rake::Task["active:tests:prepare"].execute(:rails => rails_version, :path => "mybundle_#{rails_version.gsub(/\./,"")}")
+        Rake::Task["active:tests:newapp"].execute(:inspection => true)
+        puts "--- End test with rails #{rails_version} ---"
       end
     end
   end
