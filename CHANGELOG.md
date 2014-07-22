@@ -1,3 +1,9 @@
+0.4.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.4.0...v0.4.1) July 22th, 2014
+------------------------------
+* Added formtastic github url
+* Turbolinks now works
+* Several little improvements
+
 0.4.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.3.0...v0.4.0) April 11th, 2014
 ------------------------------
 * Rails 4.1 passed

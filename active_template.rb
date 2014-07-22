@@ -99,6 +99,7 @@ if authentication
     REMEM
     p stdout
   end
+  gem "devise"
 
   authorization = test_mode || yes?("Authorization ?")
   if authorization
@@ -112,6 +113,7 @@ gem 'state_machine' if test_mode || yes?("Do you have to handle states ?")
 if /4.1.*/ === rails_version
   gem 'ransack',            git: 'http://github.com/activerecord-hackery/ransack.git',     branch: 'rails-4.1'
   gem 'polyamorous',        git: 'http://github.com/activerecord-hackery/polyamorous.git'
+  gem 'formtastic',         git: 'http://github.com/justinfrench/formtastic.git'
 end
 
 dashboard_root = test_mode || yes?("Would you use dashboard as root ? (recommended)")
