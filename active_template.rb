@@ -50,7 +50,7 @@ if use_git
 end
 
 
-gem "activeadmin",          git: 'http://github.com/gregbell/active_admin.git'
+gem "activeadmin",          git: 'https://github.com/gregbell/active_admin.git'
 if test_mode
   gem "active_leonardo",    path: "../../."
 else
@@ -109,11 +109,13 @@ end
 
 gem 'state_machine' if test_mode || yes?("Do you have to handle states ?")
 
-# Updates for Rails 4.1
-if /4.1.*/ === rails_version
-  gem 'ransack',            git: 'http://github.com/activerecord-hackery/ransack.git',     branch: 'rails-4.1'
-  gem 'polyamorous',        git: 'http://github.com/activerecord-hackery/polyamorous.git'
-  gem 'formtastic',         git: 'http://github.com/justinfrench/formtastic.git'
+# Updates for latest Rails versions
+if /4.1/ === rails_version
+#  gem 'ransack',            git: 'http://github.com/activerecord-hackery/ransack.git',     branch: 'rails-4.1'
+#  gem 'polyamorous',        git: 'http://github.com/activerecord-hackery/polyamorous.git'
+#  gem 'formtastic',         git: 'http://github.com/justinfrench/formtastic.git'
+elsif /4.2/ === rails_version
+  gem 'inherited_resources', git: 'https://github.com/josevalim/inherited_resources.git', branch: 'rails-4-2'
 end
 
 dashboard_root = test_mode || yes?("Would you use dashboard as root ? (recommended)")

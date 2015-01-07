@@ -2,21 +2,14 @@ require 'fileutils'
 
 namespace :active do
   namespace :tests do
-    desc "Prova"
-    task(:prova) do  |task_name, args|
-      cmd = "bundle install --path=mybundle_prova"
-      puts "#{cmd} CI_RAILS: #{ENV['CI_RAILS']}"
-      puts "from #{Dir.pwd}"
-      system 'install.bat mybundle_prova'
-    end
 
     desc "Prepare the environment passing rails version as argument or ENV['CI_RAILS']=x.x"
     task(:prepare, [:rails, :path]) do  |task_name, args|
       path = " --path=#{args[:path]}" if args[:path]
       ENV['CI_RAILS'] = args[:rails] if args[:rails]
       cmd = "bundle install#{path}"
-      puts "#{cmd} CI_RAILS: #{ENV['CI_RAILS']}"
-      system cmd
+      puts "#{cmd} with CI_RAILS: #{ENV['CI_RAILS']}"
+      raise "Failed: #{cmd} #{ENV['CI_RAILS']}" unless system(cmd)
     end
 
     desc "Creates a test rails app for the specs to run against"
@@ -43,7 +36,7 @@ namespace :active do
         commands = []
         commands << "delete #{File.join(test_folder,app_name)}"
         commands.concat [
-            "bundle exec rails new #{test_folder}/#{app_name} -m active_template.rb test_mode",
+            "bundle exec rails new #{test_folder}/#{app_name} -m active_template.rb test_mode --skip-bundle",
             [File.join(test_folder,app_name), "bundle install --path=mybundle_app",
                                               "bundle exec rails g leosca discussion name body:text",
                                               "bundle exec rails g leosca message discussion:references name body:text",
@@ -82,7 +75,7 @@ namespace :active do
 
     desc "Tests all rails versions"
     task(:all, [:inspection, :rails_versions]) do  |task_name, args|
-      rails_versions = args[:rails_versions] ? args[:rails_versions].split(' ') : %w(3.2 4.0 4.1)
+      rails_versions = args[:rails_versions] ? args[:rails_versions].split('-') : %w(3.2 4.0 4.1 4.2)
       puts "Rails versions to test: #{rails_versions.join(', ')}"
       rails_versions.each do |rails_version|
         puts "--- Start test with rails #{rails_version} ---"

@@ -1,3 +1,10 @@
+0.5.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.4.1...v0.5.0) Jennuary 7th, 2015
+------------------------------
+* Removed custom cancan integration, now activeadmin includes it
+* Improved the template for rails 4.2
+* removed the dependency with active admin which version 1 remains in beta
+* Improved Readme and test.rake
+
 0.4.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.4.0...v0.4.1) July 22th, 2014
 ------------------------------
 * Added formtastic github url

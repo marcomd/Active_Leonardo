@@ -9,7 +9,8 @@ env:
   - CI_RAILS=3.2
   - CI_RAILS=4.0
   - CI_RAILS=4.1
+  - CI_RAILS=4.2
 rvm:
   - 1.9.3
   - 2.0.0
-  - 2.1.1
+  - 2.1.5

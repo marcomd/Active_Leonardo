@@ -1,6 +1,6 @@
 # Leolay Generators
 
-[![Version     ](http://img.shields.io/gem/v/active_leonardo.svg)                     ](https://rubygems.org/gems/active_leonardo)
+[![Version     ](https://badge.fury.io/rb/active_leonardo.svg)                        ](https://rubygems.org/gems/active_leonardo)
 [![Travis CI   ](http://img.shields.io/travis/marcomd/Active_Leonardo/master.svg)     ](https://travis-ci.org/marcomd/Active_Leonardo)
 [![Quality     ](http://img.shields.io/codeclimate/github/marcomd/Active_Leonardo.svg)](https://codeclimate.com/github/marcomd/Active_Leonardo)
 
@@ -11,18 +11,10 @@ It generates the layout, the style, the internationalization and it helps you to
 
 This version has been tested on:
 
-* Rails `3.2.x` and Ruby `1.9.3` on Windows OS
-* Rails `3.2.x` and Ruby `2.0.x` on Windows OS
-* Rails `4.0.x` and Ruby `1.9.x` on Windows OS
-* Rails `4.0.x` and Ruby `2.0.x` on Windows OS
-* Rails `3.2.x` and Ruby `1.9.3` on Linux
-* Rails `3.2.x` and Ruby `2.0.x` on Linux
-* Rails `3.2.x` and Ruby `2.1.x` on Linux
-* Rails `4.0.x` and Ruby `1.9.3` on Linux
-* Rails `4.0.x` and Ruby `2.0.x` on Linux
-* Rails `4.0.x` and Ruby `2.1.x` on Linux
+* Rails `3.2` `4.0` `4.1` `4.2` and Ruby `1.9.3` `2.0.0` `2.1.5` on Windows OS
+* Rails `3.2` `4.0` `4.1` `4.1` and Ruby `1.9.3` `2.0.0` `2.1.5` on Linux OS
 
-We are pleased to have achieved this result :smile:
+Click on Travis badge for more details.
 
 
 ## Install
@@ -163,49 +155,65 @@ Currently the only one available is provided by ActiveAdmin
 * active [default]
 
 
-## How to perform tests
+## How to test this project locally
+
+Download this project and go inside the folder
+
+Install the bundle wherever you want:
+
+```ruby
+bundle install --path=mybundle
+```
 
 Check current tasks typing:
 
 ```ruby
-bundle exec rake -T
+rake -T
 ```
 
-    rake active:tests:all[inspection]           # Tests all rails versions
-    rake active:tests:newapp[inspection,rails]  # Creates a test rails app for ...
-    rake active:tests:prepare[rails,path]       # Prepare the environment passi...
+    rake active:tests:all[inspection,rails_versions]  # Tests all rails versions
+    rake active:tests:newapp[inspection,rails]        # Creates a test rails ap...
+    rake active:tests:prepare[rails,path]             # Prepare the environment...
 
-if you want to test all, you can entrust to our package:
+If you want to test everything we planned
+
 ```ruby
-bundle exec rake active:tests:all[inspection]
+rake active:tests:all[inspection]
 ```
 
 if you pass the argument inspection you can check the application under the test folder:
 
     test/TestApp_xxx_32
     test/TestApp_xxx_40
+    test/TestApp_xxx_41
+    test/TestApp_xxx_42
 
 where xxx is the current ruby version and the last number the rails version.
+Remember everytime you run a test that folders will be deleted and recreated.
 
-Every rails version has its own bundle under mybundle_xx folder.
+Every rails version has its own bundle under ActiveLeonardo\mybundle_xx folder.
 
-If you want to perform a custom test, firstly make sure Gemfile.lock is not present otherwise delete it
-then you can type:
-
-```ruby
-bundle exec active:tests:prepare['3.2','mybundle_path']
-```
-
-_It sets the variable ENV[RAILS_CI] and prepares the package in the specified path_
+If you want to specify the rails version type:
 
 ```ruby
-bundle exec rake active:tests:newapp[inspection]
+rake active:tests:all[inspection,4.2]
 ```
 
-the rails version has already been set by "active:tests:prepare" task.
+or multiple versions
 
+```ruby
+rake active:tests:all[inspection,4.1-4.2]
+```
 
-If you execute tests with the inspection parameter remember to delete app folder under test/ before perform a new execution.
+you may also specify your rails as ENV variables, for example on windows:
+
+```ruby
+set CI_RAILS=4.2
+bundle install --path=mybundle_42
+rake active:tests:newapp[inspection,4.2]
+```
+
+Do **NOT** exec rake tests from bundle to avoid its bubble.
 
 
 ## Tutorial
@@ -219,9 +227,16 @@ If you are having a problem please submit an issue at
 * m.mastrodonato@gmail.com
 * marcovlonghitano@gmail.com
 
+
 ## Rails 3.2.x
 
-Use previous 0.1.0 version (tested with activeadmin 0.5.x)
+It works on my system but if you have any troubles you may try 0.1.0 version (tested with activeadmin 0.5.x)
+
+
+## Rails 3.1.x
+
+Why you should do that?
+
 
 ## Rails 2 and Rails 3.0.x
 
