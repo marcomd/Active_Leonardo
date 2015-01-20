@@ -1,3 +1,9 @@
+0.5.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.5.0...v0.5.1) Jennuary 20th, 2015
+------------------------------
+* Tutorial updated
+* Change in Ability model: the pre configured user profile now cannot destroy resource
+* License updated
+
 0.5.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.4.1...v0.5.0) Jennuary 7th, 2015
 ------------------------------
 * Removed custom cancan integration, now activeadmin includes it
