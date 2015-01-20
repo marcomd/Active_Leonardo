@@ -70,7 +70,8 @@ module Rails
           can :read, #{class_name} if #{options[:auth_class].downcase}.role? :guest
           if #{options[:auth_class].downcase}.role? :user
             can [:read, :create], #{class_name}
-            can [:update, :destroy], #{class_name}
+            can [:update], #{class_name}
+            #can [:destroy], #{class_name}
           end
           if #{options[:auth_class].downcase}.role? :manager
             can [:read, :create, :update, :destroy], #{class_name}

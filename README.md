@@ -23,9 +23,16 @@ Click on Travis badge for more details.
 
 or
 
-    rails new ActiveLeo -m http://dl.dropbox.com/u/52600966/active_template.rb
+    rails new ActiveLeo -m https://db.tt/gPe6A0l9
 
-Click [here](http://dl.dropbox.com/u/52600966/active_template.rb) to download the template.
+or
+
+    click [here](https://dl.dropboxusercontent.com/u/52600966/active_template.rb) to download the template.
+
+or
+
+    You can also get it from the gem root folder
+
 
 ## Usage
 
@@ -44,9 +51,7 @@ You can run it more times and right like scaffold, it's smart and won't generate
 
 1.  Firstly, create layout and initialize your project:
 
-        rails new ActiveLeo -m http://dl.dropbox.com/u/52600966/active_template.rb
-
-    (You can also find the template into gem root folder)
+        rails new ActiveLeo -m YOUR_TEMPLATE_PATH (see above: install paragraph)
 
     Answer y to all gems you need.
     After the questions it will start generations.
@@ -76,11 +81,13 @@ You can run it more times and right like scaffold, it's smart and won't generate
 
     You can login as three different profiles loaded with a previous db:seed:
 
-    1. admin@activeleo.com, password: abcd1234 [this profile can do everything]
+    1. admin@activeleo.com,   password: abcd1234 [this profile can do everything]
 
-    2. manager@activeleo.com, password: abcd1234 [can read, create and update]
+    2. manager@activeleo.com, password: abcd1234 [can read, create, update and destroy]
 
-    3. user@activeleo.com, password: abcd1234 [can read, create, update and destroy]
+    3. user@activeleo.com,    password: abcd1234 [can read, create and update]
+
+    There is a fourth profile for _guest_ users who can only see the data. In addition to these you can create all the profiles you need according to cancan rules.
 
 
 3.  Create your resource:
@@ -223,19 +230,19 @@ On my [Blog](http://mastrodonato.it/) you can find some other info.
 
 ## Found a bug?
 
-If you are having a problem please submit an issue at
+Please open an issue on github or ask
 * m.mastrodonato@gmail.com
 * marcovlonghitano@gmail.com
 
 
 ## Rails 3.2.x
 
-It works on my system but if you have any troubles you may try 0.1.0 version (tested with activeadmin 0.5.x)
+It works
 
 
 ## Rails 3.1.x
 
-Why you should do that?
+It should work but has not been tested
 
 
 ## Rails 2 and Rails 3.0.x
