@@ -146,9 +146,11 @@ class LeolayGenerator < Rails::Generators::Base
   def create_users_for_development
     return unless options.authentication?
     file = "db/seeds.rb"
+    # Remove devise default user
+    gsub_file file, /User\.create!\(.+\)/, "" if File.exists?(file)
+    # Add default users
     append_file file do
       <<-FILE.gsub(/^      /, '')
-      #{auth_class}.delete_all if #{auth_class}.count == 1
       user=#{auth_class}.new :email => 'admin@#{app_name}.com', :password => 'abcd1234', :password_confirmation => 'abcd1234'
       #{"user.roles=['admin']" if options.authorization?}
       user.save

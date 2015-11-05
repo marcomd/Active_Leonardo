@@ -1,3 +1,8 @@
+0.5.2 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.5.1...v0.5.2) November 5th, 2015
+------------------------------
+* Little improvements to work with rails 4.2
+* Removed devise default user
+
 0.5.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.5.0...v0.5.1) Jennuary 20th, 2015
 ------------------------------
 * Tutorial updated

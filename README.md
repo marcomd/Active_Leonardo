@@ -25,7 +25,7 @@ or
 
     rails new ActiveLeo -m https://db.tt/gPe6A0l9
 
-or click [here](https://dl.dropboxusercontent.com/u/52600966/active_template.rb) to download the template.
+or click [here](https://db.tt/gPe6A0l9) to download the template.
 
 You can also get it from the gem root folder
 
@@ -63,6 +63,11 @@ You can run it more times and right like scaffold, it's smart and won't generate
 
 2.  You will get an application ready to work, run:
 
+        rake db:migrate
+        rake db:seed
+
+    then
+
         rails s
 
     and try it on http://localhost:3000
@@ -75,7 +80,7 @@ You can run it more times and right like scaffold, it's smart and won't generate
 
         app\views\application\_session.html.erb
 
-    You can login as three different profiles loaded with a previous db:seed:
+    You can login as three different profiles as set in db\seeds.rb:
 
     1. admin@activeleo.com,   password: abcd1234 [this profile can do everything]
 
@@ -219,18 +224,6 @@ rake active:tests:newapp[inspection,4.2]
 Do **NOT** exec rake tests from bundle to avoid its bubble.
 
 
-## Tutorial
-
-On my [Blog](http://mastrodonato.it/) you can find some other info.
-
-
-## Found a bug?
-
-Please open an issue on github or ask
-* m.mastrodonato@gmail.com
-* marcovlonghitano@gmail.com
-
-
 ## Rails 3.2.x
 
 It works
@@ -246,5 +239,25 @@ It should work but has not been tested
 This Generators does not work with versions earlier 3.1
 
 
+## Tutorial
+
+Visit my [Blog](http://en-marcomastrodonato.blogspot.it/2012/08/create-management-app-with-activeadmin-rails.html/)
 
 
+## Found a bug?
+
+Please open an issue.
+
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-feature`)
+3. Commit your changes (`git commit -am 'I made extensive use of all my creativity'`)
+4. Push to the branch (`git push origin my-feature`)
+5. Create new Pull Request
+
+## License
+
+The GNU Lesser General Public License, version 3.0 (LGPL-3.0)
+See LICENSE file

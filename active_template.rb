@@ -1,6 +1,6 @@
 #########################################################
-# 2014 Marco Mastrodonato(c)
-# This is a Rails 4.0 template to use with activeleonardo gem
+# 2015 Marco Mastrodonato(c)
+# This is a Rails 4.x template to use with activeleonardo gem
 # https://rubygems.org/gems/active_leonardo
 # https://github.com/marcomd/Active_Leonardo
 # 
@@ -49,8 +49,8 @@ if use_git
   EOS
 end
 
+gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin.git'
 
-gem "activeadmin",          git: 'https://github.com/gregbell/active_admin.git'
 if test_mode
   gem "active_leonardo",    path: "../../."
 else
@@ -65,12 +65,6 @@ if easy_develop
   gem "better_errors",      group: :development
   gem "awesome_print",      group: :development
 end
-
-#use_editor = yes?("Do you want a wysihtml editor?")
-#if use_editor
-#  gem 'activeadmin-dragonfly', git: 'https://github.com/stefanoverna/activeadmin-dragonfly'
-#  gem 'activeadmin-wysihtml5', git: 'https://github.com/stefanoverna/activeadmin-wysihtml5'
-#end
 
 rspec = test_mode || yes?("Add rspec as testing framework ?")
 if rspec
@@ -107,16 +101,9 @@ if authentication
   end
 end
 
-gem 'state_machine' if test_mode || yes?("Do you have to handle states ?")
+gem 'state_machines' if test_mode || yes?("Do you have to handle states ?")
 
-# Updates for latest Rails versions
-if /4.1/ === rails_version
-#  gem 'ransack',            git: 'http://github.com/activerecord-hackery/ransack.git',     branch: 'rails-4.1'
-#  gem 'polyamorous',        git: 'http://github.com/activerecord-hackery/polyamorous.git'
-#  gem 'formtastic',         git: 'http://github.com/justinfrench/formtastic.git'
-elsif /4.2/ === rails_version
-  gem 'inherited_resources', git: 'https://github.com/josevalim/inherited_resources.git', branch: 'rails-4-2'
-end
+gem 'inherited_resources'
 
 dashboard_root = test_mode || yes?("Would you use dashboard as root ? (recommended)")
 home = test_mode || yes?("Ok. Would you create home controller as root ?") unless dashboard_root

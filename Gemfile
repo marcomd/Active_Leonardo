@@ -14,7 +14,7 @@ case ENV['CI_RAILS']
   when '4.2'
     gem 'rails', '~> 4.2.0'
     gem 'tzinfo-data'
-    gem 'inherited_resources', git: 'https://github.com/josevalim/inherited_resources.git', branch: 'rails-4-2'
+    gem 'inherited_resources'
   else
     gem 'rails'
     gem 'coffee-rails'
@@ -27,6 +27,6 @@ gem "rspec-rails",      group: [:test, :development]
 gem "capybara",         group: :test
 gem "launchy",          group: :test
 gem "database_cleaner", group: :test
-gem "activeadmin",      git: "https://github.com/activeadmin/activeadmin.git"
+gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin.git'
 gem "cancan"
 gem "devise"

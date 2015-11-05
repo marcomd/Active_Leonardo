@@ -1,13 +1,13 @@
 Gem::Specification.new do |s|
   s.name          = "active_leonardo"
-  s.version       = "0.5.1"
-  s.date          = "2015-01-20"
+  s.version       = "0.5.2"
+  s.date          = "2015-11-05"
   s.summary       = "This gem provides a new customized scaffold generator to combine with active admin"
   s.description   = "This generator help you to create new Rails applications to combine with active admin gem. It generates application structure to easily get the internationalization and authorization."
   s.homepage      = "https://github.com/marcomd/Active_Leonardo"
   s.authors       = ["Marco Mastrodonato", "Marco Longhitano"]
   s.email         = ["m.mastrodonato@gmail.com", "marcovlonghitano@gmail.com"]
-  s.licenses      = ['GPL-3.0']
+  s.licenses      = ['LGPL-3.0']
   s.requirements  = "Start a new app with the active_template.rb inside root folder"
   
   s.require_paths = ["lib"]
