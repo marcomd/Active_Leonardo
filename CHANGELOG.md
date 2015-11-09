@@ -1,3 +1,8 @@
+0.5.3 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.5.2...v0.5.3) November 9th, 2015
+------------------------------
+* Removed a bug that occurs during the destroy
+* Removed obsolete test cases from travis
+
 0.5.2 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.5.1...v0.5.2) November 5th, 2015
 ------------------------------
 * Little improvements to work with rails 4.2
