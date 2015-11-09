@@ -120,7 +120,7 @@ module Rails
               end
 
             FILE
-          end
+          end if File.exists?(file)
         end
 
         inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do

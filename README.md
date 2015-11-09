@@ -9,10 +9,8 @@ It generates the layout, the style, the internationalization and it helps you to
 
 ## Compatibility
 
-This version has been tested on:
+This version has been tested on Rails `3.2` to `4.2` and Ruby `1.9.3` to `2.1.7` on Windows OS and Linux
 
-* Rails `3.2` `4.0` `4.1` `4.2` and Ruby `1.9.3` `2.0.0` `2.1.5` on Windows OS
-* Rails `3.2` `4.0` `4.1` `4.1` and Ruby `1.9.3` `2.0.0` `2.1.5` on Linux OS
 
 Click on Travis badge for more details.
 

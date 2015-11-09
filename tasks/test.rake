@@ -40,6 +40,8 @@ namespace :active do
             [File.join(test_folder,app_name), "bundle install --path=mybundle_app",
                                               "bundle exec rails g leosca discussion name body:text",
                                               "bundle exec rails g leosca message discussion:references name body:text",
+                                              "bundle exec rails g leosca foo name",
+                                              "bundle exec rails d leosca foo name",
                                               "bundle exec rake db:migrate",
                                               "bundle exec rake db:seed"]
         ]
@@ -75,7 +77,7 @@ namespace :active do
 
     desc "Tests all rails versions"
     task(:all, [:inspection, :rails_versions]) do  |task_name, args|
-      rails_versions = args[:rails_versions] ? args[:rails_versions].split('-') : %w(3.2 4.0 4.1 4.2)
+      rails_versions = args[:rails_versions] ? args[:rails_versions].split('-') : %w(3.2 4.2)
       puts "Rails versions to test: #{rails_versions.join(', ')}"
       rails_versions.each do |rails_version|
         puts "--- Start test with rails #{rails_version} ---"
