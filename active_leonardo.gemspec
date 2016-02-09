@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name          = "active_leonardo"
-  s.version       = "0.5.3"
-  s.date          = "2015-11-09"
+  s.version       = "0.6.0"
+  s.date          = "2016-02-09"
   s.summary       = "This gem provides a new customized scaffold generator to combine with active admin"
   s.description   = "This generator help you to create new Rails applications to combine with active admin gem. It generates application structure to easily get the internationalization and authorization."
   s.homepage      = "https://github.com/marcomd/Active_Leonardo"

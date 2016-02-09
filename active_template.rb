@@ -1,6 +1,6 @@
 #########################################################
-# 2015 Marco Mastrodonato(c)
-# This is a Rails 4.x template to use with activeleonardo gem
+# 2016 Marco Mastrodonato(c)
+# This is a Rails 5.x template to use with activeleonardo gem
 # https://rubygems.org/gems/active_leonardo
 # https://github.com/marcomd/Active_Leonardo
 # 
@@ -49,7 +49,8 @@ if use_git
   EOS
 end
 
-gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin.git'
+#gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin.git'
+gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin', branch: 'rails-5-rspec'
 
 if test_mode
   gem "active_leonardo",    path: "../../."
@@ -93,7 +94,11 @@ if authentication
     REMEM
     p stdout
   end
-  gem "devise"
+  if /^5/ === rails_version    
+    gem "devise", git: "https://github.com/plataformatec/devise.git"
+  else
+    gem "devise"
+  end
 
   authorization = test_mode || yes?("Authorization ?")
   if authorization
@@ -104,6 +109,11 @@ end
 gem 'state_machines' if test_mode || yes?("Do you have to handle states ?")
 
 gem 'inherited_resources'
+if /^5/ === rails_version    
+  gem 'formtastic', git: 'https://github.com/justinfrench/formtastic.git'
+else
+  gem 'formtastic'
+end  
 
 dashboard_root = test_mode || yes?("Would you use dashboard as root ? (recommended)")
 home = test_mode || yes?("Ok. Would you create home controller as root ?") unless dashboard_root

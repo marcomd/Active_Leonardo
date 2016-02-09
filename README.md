@@ -9,7 +9,7 @@ It generates the layout, the style, the internationalization and it helps you to
 
 ## Compatibility
 
-This version has been tested on Rails `3.2` to `4.2` and Ruby `1.9.3` to `2.1.7` on Windows OS and Linux
+This version has been tested on Rails `3.2` to `5.0.beta2` and Ruby `1.9.3` to `2.2.3` on Windows OS and Linux
 
 
 Click on Travis badge for more details.

@@ -67,16 +67,9 @@ module Rails
           <<-FILE.gsub(/^      /, '')
 
           # ----- #{class_name.upcase} ----- #
-          can :read, #{class_name} if #{options[:auth_class].downcase}.role? :guest
-          if #{options[:auth_class].downcase}.role? :user
-            can [:read, :create], #{class_name}
-            can [:update], #{class_name}
-            #can [:destroy], #{class_name}
-          end
-          if #{options[:auth_class].downcase}.role? :manager
-            can [:read, :create, :update, :destroy], #{class_name}
-          end
-
+          can :read, #{class_name}                                if #{options[:auth_class].downcase}.role? :guest
+          can [:read, :create, :update], #{class_name}            if #{options[:auth_class].downcase}.role? :user
+          can [:read, :create, :update, :destroy], #{class_name}  if #{options[:auth_class].downcase}.role? :manager
           FILE
         end
       end
@@ -110,12 +103,49 @@ module Rails
         invoke "active_admin:resource", [singular_table_name]
         file = "app/admin/#{singular_table_name}.rb"
 
-        if /^4./ === Rails.version
+        inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
+          <<-FILE.gsub(/^          /, '')
+
+            index do
+              selectable_column
+              id_column
+          #{attributes.first(5).map{|attr| "    column(:#{attr.name}){|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
+              actions
+            end
+
+            show do |#{singular_table_name}|
+              attributes_table do
+          #{attributes.map{|attr| "      row(:#{attr.name}){|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
+                row :created_at
+                row :updated_at
+              end
+              # Insert here child tables
+              #panel I18n.t('models.xxxxx') do
+              #  table_for #{singular_table_name}.xxxxx do
+              #    column(:id) {|xxxxx| link_to xxxxx.id, [:admin, xxxxx]}
+              #end
+              active_admin_comments
+            end
+
+          #{attributes.map{|attr| "  filter :#{attr.name}"}.join("\n")}
+
+            form do |f|
+              f.inputs do
+          #{attributes.map{|attr| "      f.input :#{attr.name}"}.join("\n")}
+              end
+              #For date use                    as: :datepicker, input_html: { class: 'calendar' }
+              #For state machine data field    as: :select, collection: (f.object.class.state_machine.states.collect { |state| [state.human_name.underscore.capitalize, state.value] }.sort_by { |name| name }), :for => :states, :include_blank => false
+              f.actions
+            end
+          FILE
+        end if File.exists?(file)
+
+        if /^[4-5]/ === Rails.version
           inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
             <<-FILE.gsub(/^            /, '')
 
               permit_params do
-                permitted = [#{attributes.map{|attr| ":#{attr.name}"}.join(', ')}]
+                permitted = [:id, #{attributes.map{|attr| ":#{attr.name}"}.join(', ')}, :created_at, :updated_at]
                 permitted
               end
 
@@ -131,7 +161,6 @@ module Rails
             controller do
               load_resource :except => :index
             end
-
 
           FILE
         end if authorization? && File.exists?(file)

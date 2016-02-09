@@ -1,3 +1,10 @@
+0.6.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.5.3...v0.6.0) February 9th, 2016
+------------------------------
+* Rails 5 ready
+* Now leosca generator prepares the activeadmin dsl for index, show, filters and form
+* New user name method inside the model to show a name from email
+* Updated italian devise message to align with version 3.5 of devise
+
 0.5.3 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.5.2...v0.5.3) November 9th, 2015
 ------------------------------
 * Removed a bug that occurs during the destroy

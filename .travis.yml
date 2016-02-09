@@ -8,6 +8,7 @@ script:
 env:
   - CI_RAILS=3.2
   - CI_RAILS=4.2
+  - CI_RAILS=5.0.BETA
 rvm:
   - 1.9.3
   - 2.1.7

@@ -25,4 +25,9 @@ body.active_admin {
   #footer {
     text-align: center;
   }
+  input[type=text].datepicker.calendar {
+    background: #fff image-url($style_path + "/datepicker-input-icon.png") no-repeat 100% 7px;
+    padding-right: $date-range-filter-input-right-padding;
+    width: $date-range-filter-input-width;
+  }
 }

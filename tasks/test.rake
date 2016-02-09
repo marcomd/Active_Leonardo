@@ -77,7 +77,7 @@ namespace :active do
 
     desc "Tests all rails versions"
     task(:all, [:inspection, :rails_versions]) do  |task_name, args|
-      rails_versions = args[:rails_versions] ? args[:rails_versions].split('-') : %w(3.2 4.2)
+      rails_versions = args[:rails_versions] ? args[:rails_versions].split('-') : %w(3.2 4.2 5.0.BETA)
       puts "Rails versions to test: #{rails_versions.join(', ')}"
       rails_versions.each do |rails_version|
         puts "--- Start test with rails #{rails_version} ---"

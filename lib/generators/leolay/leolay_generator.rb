@@ -124,6 +124,14 @@ class LeolayGenerator < Rails::Generators::Base
       def admin?
         self.role? 'admin'
       end
+      def name
+        return unless self.email
+        # Get left email text
+        match_data = self.email.match(/^([a-z]+)(\.|\-|\_|)([a-z]+|)/i)
+        name = "\#{match_data[1].capitalize}"
+        name << " \#{match_data[3].capitalize}" unless match_data[3].blank?
+        name
+      end
       FILE
     end
 
