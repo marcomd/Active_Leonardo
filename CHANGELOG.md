@@ -1,3 +1,8 @@
+0.6.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.6.0...v0.6.1) February 9th, 2016
+------------------------------
+* Removed Rails 3.2 from tests
+* Removed Ruby 1.9 and 2.1 from tests
+
 0.6.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.5.3...v0.6.0) February 9th, 2016
 ------------------------------
 * Rails 5 ready

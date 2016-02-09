@@ -9,10 +9,11 @@ It generates the layout, the style, the internationalization and it helps you to
 
 ## Compatibility
 
-This version has been tested on Rails `3.2` to `5.0.beta2` and Ruby `1.9.3` to `2.2.3` on Windows OS and Linux
-
-
+This version has been tested on Rails `3.2` to `5.0.beta2` and Ruby `1.9.3`+ on Windows OS and Linux
+For previous version go to the bottom of this read me.
 Click on Travis badge for more details.
+
+**From the next version, support will drop for Rails `3.2` and Ruby under `2.2.3`**
 
 
 ## Install
@@ -189,10 +190,8 @@ rake active:tests:all[inspection]
 
 if you pass the argument inspection you can check the application under the test folder:
 
-    test/TestApp_xxx_32
-    test/TestApp_xxx_40
-    test/TestApp_xxx_41
     test/TestApp_xxx_42
+    ...
 
 where xxx is the current ruby version and the last number the rails version.
 Remember everytime you run a test that folders will be deleted and recreated.
@@ -221,10 +220,14 @@ rake active:tests:newapp[inspection,4.2]
 
 Do **NOT** exec rake tests from bundle to avoid its bubble.
 
+## Ruby 1.9
+
+Supported until 0.6.x version
+
 
 ## Rails 3.2.x
 
-It works
+Supported until 0.6.x version
 
 
 ## Rails 3.1.x
