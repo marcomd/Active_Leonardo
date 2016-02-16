@@ -9,7 +9,7 @@ namespace :active do
       ENV['CI_RAILS'] = args[:rails] if args[:rails]
       cmd = "bundle install#{path}"
       puts "#{cmd} with CI_RAILS: #{ENV['CI_RAILS']}"
-      raise "Failed: #{cmd} #{ENV['CI_RAILS']}" unless system(cmd)
+      raise "Failed: #{cmd}" unless system(cmd)
     end
 
     desc "Creates a test rails app for the specs to run against"

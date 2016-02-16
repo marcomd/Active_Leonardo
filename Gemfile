@@ -31,12 +31,11 @@ gem "rspec-rails",      group: [:test, :development]
 gem "capybara",         group: :test
 gem "launchy",          group: :test
 gem "database_cleaner", group: :test
+gem 'activeadmin',    git: 'https://github.com/activeadmin/activeadmin.git'
 if ENV['CI_RAILS'] == '5.0.BETA'
   gem 'formtastic',     git: 'https://github.com/justinfrench/formtastic.git'
-  gem 'activeadmin',    git: 'https://github.com/activeadmin/activeadmin.git', branch: 'rails-5-rspec'
   gem "devise",         git: "https://github.com/plataformatec/devise.git"
 else
-  gem 'activeadmin',    git: 'https://github.com/activeadmin/activeadmin.git'
   gem "devise"
 end
 gem "cancan"

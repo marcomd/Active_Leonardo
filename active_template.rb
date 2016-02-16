@@ -49,8 +49,7 @@ if use_git
   EOS
 end
 
-#gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin.git'
-gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin', branch: 'rails-5-rspec'
+gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin'
 
 if test_mode
   gem "active_leonardo",    path: "../../."
@@ -95,7 +94,7 @@ if authentication
     p stdout
   end
   if /^5/ === rails_version    
-    gem "devise", git: "https://github.com/plataformatec/devise.git"
+    gem "devise", git: "https://github.com/plataformatec/devise"
   else
     gem "devise"
   end

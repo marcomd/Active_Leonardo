@@ -99,51 +99,56 @@ module Rails
 
       def invoke_active_admin
         return unless activeadmin? and options[:activeadmin]
-        #Rails::Generators.invoke("active_admin:resource", [singular_table_name])
+
         invoke "active_admin:resource", [singular_table_name]
         file = "app/admin/#{singular_table_name}.rb"
 
+        indent_spaces = 25
         inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
           <<-FILE.gsub(/^          /, '')
+            # ActiveLeonardo: Remove comments where you need it
+            #index do
+            #  selectable_column
+            #  id_column
+          #{attributes.map{|attr| "  #  column(:#{attr.name})#{' ' * (indent_spaces-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
+            #  actions
+            #end
 
-            index do
-              selectable_column
-              id_column
-          #{attributes.first(5).map{|attr| "    column(:#{attr.name}){|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
-              actions
-            end
+            #show do |#{singular_table_name}|
+            #  attributes_table do
+          #{attributes.map{|attr| "  #    row(:#{attr.name})#{' ' * (indent_spaces-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
+            #    row :created_at
+            #    row :updated_at
+            #  end
+            #  # Insert here child tables
+            #  panel I18n.t('models.your_child_tables') do
+            #    table_for #{singular_table_name}.your_child_tables do
+            #      column(:id) {|your_child_tables| link_to your_child_tables.id, [:admin, your_child_tables]}
+            #    end
+            #  end
+            #  active_admin_comments
+            #end
 
-            show do |#{singular_table_name}|
-              attributes_table do
-          #{attributes.map{|attr| "      row(:#{attr.name}){|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
-                row :created_at
-                row :updated_at
-              end
-              # Insert here child tables
-              #panel I18n.t('models.xxxxx') do
-              #  table_for #{singular_table_name}.xxxxx do
-              #    column(:id) {|xxxxx| link_to xxxxx.id, [:admin, xxxxx]}
-              #end
-              active_admin_comments
-            end
+          #{attributes.map{|attr| "  #filter :#{attr.name}"}.join("\n")}
 
-          #{attributes.map{|attr| "  filter :#{attr.name}"}.join("\n")}
+            #form do |f|
+            #  f.inputs do
+          #{attributes.map{|attr| "  #    f.input :#{attr.name}"}.join("\n")}
+            #  end
+            #  #For date use                    as: :datepicker, input_html: { class: 'calendar' }
+            #  #For state machine data field    as: :select, collection: (f.object.class.state_machine.states.collect { |state| [state.human_name.underscore.capitalize, state.value] }.sort_by { |name| name }), :for => :states, :include_blank => false
+            #  f.actions
+            #end
 
-            form do |f|
-              f.inputs do
-          #{attributes.map{|attr| "      f.input :#{attr.name}"}.join("\n")}
-              end
-              #For date use                    as: :datepicker, input_html: { class: 'calendar' }
-              #For state machine data field    as: :select, collection: (f.object.class.state_machine.states.collect { |state| [state.human_name.underscore.capitalize, state.value] }.sort_by { |name| name }), :for => :states, :include_blank => false
-              f.actions
-            end
+            #csv do
+          #{attributes.map{|attr| "  #  column(:#{attr.name})#{' ' * (indent_spaces-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
+            #end
           FILE
         end if File.exists?(file)
 
         if /^[4-5]/ === Rails.version
           inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
             <<-FILE.gsub(/^            /, '')
-
               permit_params do
                 permitted = [:id, #{attributes.map{|attr| ":#{attr.name}"}.join(', ')}, :created_at, :updated_at]
                 permitted

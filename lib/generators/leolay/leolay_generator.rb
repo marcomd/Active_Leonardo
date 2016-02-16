@@ -18,9 +18,9 @@ class LeolayGenerator < Rails::Generators::Base
   class_option :verbose,        :type => :boolean,  :default => true,   :desc => "Run interactive mode"
 
   def generate_layout
-    template "styles/#{style_name}/stylesheets/app/stylesheet.css.scss",          "app/assets/stylesheets/#{style_name}.css.scss"
-    template "styles/#{style_name}/stylesheets/app/custom_active_admin.css.scss", "app/assets/stylesheets/custom_active_admin.css.scss"
-    template "styles/#{style_name}/stylesheets/app/_enviroment.css.scss",         "app/assets/stylesheets/_enviroment.css.scss"
+    template "styles/#{style_name}/stylesheets/app/stylesheet.scss",          "app/assets/stylesheets/#{style_name}.scss"
+    template "styles/#{style_name}/stylesheets/app/custom_active_admin.scss", "app/assets/stylesheets/custom_active_admin.scss"
+    template "styles/#{style_name}/stylesheets/app/_enviroment.scss",         "app/assets/stylesheets/_enviroment.scss"
 
     copy_file "app/helpers/layout_helper.rb",     "app/helpers/layout_helper.rb",           :force => !options.verbose?
     directory "styles/#{style_name}/images",      "app/assets/images/styles/#{style_name}", :force => !options.verbose?
@@ -279,7 +279,7 @@ class LeolayGenerator < Rails::Generators::Base
     end
 
 
-    file = "app/assets/stylesheets/active_admin.css.scss"
+    file = "app/assets/stylesheets/active_admin.scss"
     append_file file do
       <<-FILE.gsub(/^      /, '')
 

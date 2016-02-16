@@ -1,3 +1,10 @@
+0.7.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.6.1...v0.7.0) February 16th, 2016
+------------------------------
+* resources are now being created with dsl activeadmin like boilerplate parameter
+* new generator leosca:massive to create multiple resources from scaffold.txt file, check the documentation for more details
+* improved the documentation
+* several little improvements
+
 0.6.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.6.0...v0.6.1) February 9th, 2016
 ------------------------------
 * Removed Rails 3.2 from tests

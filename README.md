@@ -13,7 +13,7 @@ This version has been tested on Rails `3.2` to `5.0.beta2` and Ruby `1.9.3`+ on 
 For previous version go to the bottom of this read me.
 Click on Travis badge for more details.
 
-**From the next version, support will drop for Rails `3.2` and Ruby under `2.2.3`**
+**Rails `3.2` and Ruby <= `2.2.2` tested until 0.6.x version**
 
 
 ## Install
@@ -155,6 +155,50 @@ if you made a mistake and want to start from scratch just replace generate with 
 
 Of course, these options are in addition to those provided by the original scaffold
 
+### Massive resources generation's
+
+Write the resources you want to generate into the file scaffold.txt in the root app.
+A line for every resource, starting from the beginning with the name as you would with the scaffold.
+If the line is not a resource but another generator, you can simply starting with the full rails command.
+Example:
+
+    # This is the main resource... i think
+    activity user:references name:string{100} body:text completed:boolean percentage_progression:integer{1}
+    #completed: when all tasks are completed
+    # Any other comments about fields
+
+    # This table acts as...
+    task user:references activity:references name:string{100} body:text completed:boolean percentage_progression:integer{1} deadline_date:date
+
+    # I decided to add this because...
+    rails g migration AddFooToActivity foo:boolean
+
+    # I need this because...
+    rails g migration AddBarToTask bar:boolean
+
+
+then let active leonardo work for you:
+
+    rails generate leosca:massive
+
+and check the report:
+
+    create ...
+    insert ...
+    append ...
+    etc ...
+    ---------------------------------------------
+    Generations started at 18:07:45
+    18:07:46 - generations ended in 1 second(s)
+    4 generations executed
+    9 lines discarded (comments etc.)
+    ---------------------------------------------
+
+of course you can even revert:
+
+    rails destroy leosca:massive
+
+This is very useful for a rapid prototyping and if you keep it updated you can use it as information center about the database.
 
 ### Available layout
 
