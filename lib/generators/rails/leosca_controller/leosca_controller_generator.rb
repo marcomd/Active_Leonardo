@@ -12,6 +12,7 @@ module Rails
       include ::ActiveLeonardo::Leosca::Locale
       include ::ActiveLeonardo::Leosca::Rspec
       include ::ActiveLeonardo::Leosca::Seed
+      include ::ActiveLeonardo::Leosca::Activeadmin
 
       source_root File.expand_path('../templates', __FILE__)
       argument :attributes,         :type => :array,    :default => [],     :banner => "field:type field:type"
@@ -54,7 +55,7 @@ module Rails
           end
 
           #Formtastic
-          inject_into_file file, :after => "    hints:" do
+          inject_into_file file, :after => "#Hints zone - do not remove" do
             attributes_to_hints(attributes, file_name)
           end
 
@@ -98,50 +99,49 @@ module Rails
       end
 
       def invoke_active_admin
-        return unless activeadmin? and options[:activeadmin]
+        return unless activeadmin? && options[:activeadmin]
 
         invoke "active_admin:resource", [singular_table_name]
         file = "app/admin/#{singular_table_name}.rb"
 
-        indent_spaces = 25
+
         inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
           <<-FILE.gsub(/^          /, '')
             # ActiveLeonardo: Remove comments where you need it
             #index do
             #  selectable_column
             #  id_column
-          #{attributes.map{|attr| "  #  column(:#{attr.name})#{' ' * (indent_spaces-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
+          #{attributes_to_aa_index(attributes)}
             #  actions
             #end
 
             #show do |#{singular_table_name}|
             #  attributes_table do
-          #{attributes.map{|attr| "  #    row(:#{attr.name})#{' ' * (indent_spaces-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
+            #    row :id
+          #{attributes_to_aa_show(attributes)}
             #    row :created_at
             #    row :updated_at
             #  end
             #  # Insert here child tables
-            #  panel I18n.t('models.your_child_tables') do
-            #    table_for #{singular_table_name}.your_child_tables do
-            #      column(:id) {|your_child_tables| link_to your_child_tables.id, [:admin, your_child_tables]}
-            #    end
-            #  end
+            #  #panel I18n.t('models.childs') do
+            #  #  table_for #{singular_table_name}.childs do
+            #  #    column(:id) {|child| link_to child.id, [:admin, child]}
+            #  #  end
+            #  #end
             #  active_admin_comments
             #end
 
-          #{attributes.map{|attr| "  #filter :#{attr.name}"}.join("\n")}
+          #{attributes_to_aa_filter(attributes)}
 
             #form do |f|
             #  f.inputs do
-          #{attributes.map{|attr| "  #    f.input :#{attr.name}"}.join("\n")}
+          #{attributes_to_aa_form(attributes)}
             #  end
-            #  #For date use                    as: :datepicker, input_html: { class: 'calendar' }
-            #  #For state machine data field    as: :select, collection: (f.object.class.state_machine.states.collect { |state| [state.human_name.underscore.capitalize, state.value] }.sort_by { |name| name }), :for => :states, :include_blank => false
             #  f.actions
             #end
 
             #csv do
-          #{attributes.map{|attr| "  #  column(:#{attr.name})#{' ' * (indent_spaces-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")}
+          #{attributes_to_aa_csv(attributes)}
             #end
           FILE
         end if File.exists?(file)
@@ -150,7 +150,7 @@ module Rails
           inject_into_file file, :after => "ActiveAdmin.register #{class_name} do" do
             <<-FILE.gsub(/^            /, '')
               permit_params do
-                permitted = [:id, #{attributes.map{|attr| ":#{attr.name}"}.join(', ')}, :created_at, :updated_at]
+                permitted = [:id, #{attributes_to_aa_permit_params(attributes)}, :created_at, :updated_at]
                 permitted
               end
 
@@ -190,20 +190,6 @@ module Rails
           FILE
         end if File.exists?(file)
       end
-
-      #def update_parent_controller
-      #  return unless nested?
-      #  file = "app/controllers/#{plural_last_parent}_controller.rb"
-      #  inject_into_file file, :before => "  private" do
-      #    <<-FILE.gsub(/^          /, '')
-      #      def with_#{plural_table_name}
-      #        @#{last_parent} = #{last_parent.classify}.find params[:#{last_parent}_id]
-      #        @#{plural_table_name} = #{class_name}.where(:#{last_parent}_id => params[:#{last_parent}_id])
-      #      end
-      #
-      #    FILE
-      #  end if File.exists?(file)
-      #end
 
     end
   end

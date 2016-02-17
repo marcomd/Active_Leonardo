@@ -75,11 +75,11 @@ if rspec
   gem 'factory_girl_rails',             group: :test
 end
 
-authentication = test_mode || yes?("Authentication ?")
-model_name = authorization = nil
+authentication  = test_mode || yes?("Authentication ?")
+model_name      = authorization = nil
 if authentication
-  default_model_name = "User"
-  model_name = test_mode ? "" : ask(" Insert model name: [#{default_model_name}]")
+  default_model_name  = "User"
+  model_name          = test_mode ? "" : ask(" Insert model name: [#{default_model_name}]")
   if model_name.empty? || model_name == 'y'
     model_name = default_model_name
   else
@@ -112,7 +112,7 @@ if /^5/ === rails_version
   gem 'formtastic', git: 'https://github.com/justinfrench/formtastic.git'
 else
   gem 'formtastic'
-end  
+end
 
 dashboard_root = test_mode || yes?("Would you use dashboard as root ? (recommended)")
 home = test_mode || yes?("Ok. Would you create home controller as root ?") unless dashboard_root

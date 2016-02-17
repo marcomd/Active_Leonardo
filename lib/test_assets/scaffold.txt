@@ -1,0 +1,15 @@
+# This is the main resource... i think
+activity user:references name:string{100} body:text completed:boolean percentage_progression:integer{1}
+#completed: when all tasks are completed
+# Any other comments about fields
+
+# This table acts as...
+task user:references activity:references name:string{100} body:text completed:boolean percentage_progression:integer{1} deadline_date:date
+
+hint user:belongs_to activity:references message:string
+
+# I decided to add this because...
+rails g migration AddFooToActivity foo:boolean
+
+# I need this because...
+rails g migration AddBarToTask bar:boolean

@@ -25,7 +25,7 @@ namespace :active do
       raise "Please specify rails version as argument or ENV['CI_RAILS']" unless rails_version
       begin
         puts "Starting commands for rails #{rails_version}..."
-        root_path   = File.dirname(__FILE__)
+        root_path   = Dir.pwd #File.dirname(__FILE__)
         test_folder = "test"
         log_path    = File.join(File.dirname(root_path), test_folder, "#{task_name.to_s.gsub(/\:/,"_")}.log")
 
@@ -34,41 +34,56 @@ namespace :active do
         app_name = "TestApp_#{RUBY_VERSION.gsub(/\./,"")}_#{rails_version.gsub(/\./,"")}"
 
         commands = []
-        commands << "delete #{File.join(test_folder,app_name)}"
+        commands << "#DELETE #{File.join(test_folder,app_name)}"
         commands.concat [
             "bundle exec rails new #{test_folder}/#{app_name} -m active_template.rb test_mode --skip-bundle",
-            [File.join(test_folder,app_name), "bundle install --path=mybundle_app",
+                                              "#COPY #{File.join('lib','test_assets','scaffold.txt')}->#{File.join(test_folder,app_name)}",
+                                              "#CHDIR #{File.join(test_folder,app_name)}",
+                                              "bundle install --path=mybundle_app",
                                               "bundle exec rails g leosca discussion name body:text",
                                               "bundle exec rails g leosca message discussion:references name body:text",
-                                              "bundle exec rails g leosca foo name",
-                                              "bundle exec rails d leosca foo name",
+                                              "bundle exec rails g leosca:massive",
+                                              "bundle exec rails d leosca:massive",
                                               "bundle exec rake db:migrate",
-                                              "bundle exec rake db:seed"]
+                                              "bundle exec rake db:seed"
         ]
         commands << "delete #{File.join(test_folder,app_name)}"  unless inspection
         commands << "delete #{log_path}"  unless inspection
+        # commands << "#CHDIR #{root_path}"
 
+        regexp_special_cmd = '#\w+\s'
         puts "Dir.pwd #{Dir.pwd}"
-        commands.each do |command|
 
-          if command.is_a? Array
-            puts "Cmd Dir.chdir #{command.first}"
-            Dir.chdir command.shift do
-              puts "Dir.pwd #{Dir.pwd}"
-              command.each do |single_command|
-                puts "Cmd #{single_command}"
-                raise "Failed: #{command}" unless system("#{single_command}")  #>> #{log_path}
-              end
-            end
-          elsif command.include? "delete"
+        commands.each do |command|
+          if /#{regexp_special_cmd}/i === command
             puts "Cmd #{command}"
-            what = command.match(/delete\s(.+)/)[1]
-            FileUtils.rm_rf what if File.exists? what
+            # We have to do something special
+            cmd_special = command.match(/#{regexp_special_cmd}/i).to_s
+            command.sub!(cmd_special, '') unless cmd_special.empty?
+            case cmd_special
+              when /CHDIR/
+                puts "Change dir #{command}"
+                Dir.chdir command
+              when /COPY/
+                copy_from, copy_to = command.split('->')
+                puts "Copy #{command}"
+                FileUtils.cp copy_from, copy_to
+              when /DELETE/
+                if File.exists? command
+                  puts "Delete #{command}"
+                  FileUtils.rm_rf command
+                else
+                  puts "Avoid delete, #{command} not exist"
+                end
+              else raise "Special command #{cmd_special} not recognized!"
+            end
           else
             puts "Cmd #{command}"
             raise "Failed: #{command}" unless system("#{command} ") #>> #{log_path}
           end
         end
+
+
       rescue
         puts $!.message
         exit(9)
@@ -79,9 +94,12 @@ namespace :active do
     task(:all, [:inspection, :rails_versions]) do  |task_name, args|
       rails_versions = args[:rails_versions] ? args[:rails_versions].split('-') : %w(4.2 5.0.BETA)
       puts "Rails versions to test: #{rails_versions.join(', ')}"
+      root_path   = Dir.pwd
+
       rails_versions.each do |rails_version|
-        puts "--- Start test with rails #{rails_version} ---"
-        %w(Gemfile.lock).each{|file| File.delete file if File.exist? file}
+        puts "--- Start test with rails #{rails_version} #{root_path} ---"
+        Dir.chdir root_path
+        %w(Gemfile.lock).each{|file| FileUtils.rm_rf(file) if File.exists? file}
         Rake::Task["active:tests:prepare"].execute(:rails => rails_version, :path => "mybundle_#{rails_version.gsub(/\./,"")}")
         Rake::Task["active:tests:newapp"].execute(:inspection => true)
         puts "--- End test with rails #{rails_version} ---"

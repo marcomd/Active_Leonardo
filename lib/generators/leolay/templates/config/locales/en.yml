@@ -196,6 +196,7 @@ en:
     labels:
       <<: *attributes
     hints:
+      #Hints zone - do not remove
     actions:
       <<: *actions
   authentication:

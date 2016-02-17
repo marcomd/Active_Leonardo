@@ -197,6 +197,8 @@ of course you can even revert:
 
 This is very useful for a rapid prototyping and if you keep it updated you can use it as information center about the database.
 
+_If you try that example remember to add the traslation of the two field foo and bar (added by migrations), otherwise you will get a translation error._
+
 ### Available layout
 
 Currently the only one available is provided by ActiveAdmin

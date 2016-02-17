@@ -24,16 +24,6 @@ module ActiveLeonardo
       return unless options[:auth_class]
       options[:auth_class].classify
     end
-    #def formtastic?
-    #  return false unless options.formtastic?
-    #  File.exists? "config/initializers/formtastic.rb"
-    #end
-    #def jquery_ui?
-    #  File.exists? "vendor/assets/javascripts/jquery-ui"
-    #end
-    #def pagination?
-    #  File.exists? "config/initializers/kaminari_config.rb"
-    #end
   end
 
   module Leosca
@@ -162,18 +152,20 @@ module ActiveLeonardo
       def attributes_to_hints(attributes, file_name)
         content = "#{CRLF}      #{file_name}:#{CRLF}"
         attributes.each do |attribute|
-          attr_name = attribute.name.humanize
+          attribute_name_for_desc = attribute.name.humanize.downcase
           case attribute.type
             when :integer, :decimal, :float
-              content << "        #{attribute.name}: \"Fill the #{attr_name} with a#{"n" if attribute.type == :integer} #{attribute.type.to_s} number\"#{CRLF}"
+              content << "        #{attribute.name}: \"Fill the #{attribute_name_for_desc} with a#{"n" if attribute.type == :integer} #{attribute.type.to_s} number\"#{CRLF}"
             when :boolean
-              content << "        #{attribute.name}: \"Select if this #{file_name} should be #{attr_name} or not\"#{CRLF}"
-            when :string, :text
-              content << "        #{attribute.name}: \"Choose a good #{attr_name} for this #{file_name}\"#{CRLF}"
+              content << "        #{attribute.name}: \"Select if this #{file_name} should be #{attribute_name_for_desc} or not\"#{CRLF}"
+            when :string
+              content << "        #{attribute.name}: \"Choose a good #{attribute_name_for_desc} for this #{file_name}\"#{CRLF}"
+            when :text
+              content << "        #{attribute.name}: \"Write something as #{attribute_name_for_desc}\"#{CRLF}"
             when :date, :datetime, :time, :timestamp
-              content << "        #{attribute.name}: \"Choose a #{attribute.type.to_s} for #{attr_name}\"#{CRLF}"
+              content << "        #{attribute.name}: \"Choose a #{attribute.type.to_s} for #{attribute_name_for_desc}\"#{CRLF}"
             else
-              content << "        #{attribute.name}: \"Choose a #{attr_name}\"#{CRLF}"
+              content << "        #{attribute.name}: \"Choose the #{attribute_name_for_desc}\"#{CRLF}"
           end
         end
         content
@@ -181,6 +173,49 @@ module ActiveLeonardo
 
     end
 
+    module Activeadmin
+      ACTIVEADMIN_INDENT_SPACES = 25
+      def attributes_to_aa_permit_params(attributes)
+        attributes.map do |attr|
+          case attr.type
+            when :references, :belongs_to then  ":#{attr.name}_id"
+            else                                ":#{attr.name}"
+          end
+        end.join(', ')
+      end
+      def attributes_to_aa_index(attributes)
+        attributes.map do |attr|
+          case attr.type
+            when :references, :belongs_to then  "  #  column(:#{attr.name})"
+            when :boolean                 then  "  #  column(:#{attr.name})#{' ' * (ACTIVEADMIN_INDENT_SPACES-attr.name.size).abs}{|#{singular_table_name}| status_tag #{singular_table_name}.#{attr.name}}"
+            else                                "  #  column(:#{attr.name})#{' ' * (ACTIVEADMIN_INDENT_SPACES-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"
+          end
+        end.join("\n")
+      end
+      def attributes_to_aa_show(attributes)
+        attributes.map do |attr|
+          case attr.type
+            when :references, :belongs_to then  "  #    row(:#{attr.name})"
+            when :boolean                 then  "  #    row(:#{attr.name})#{' ' * (ACTIVEADMIN_INDENT_SPACES-attr.name.size).abs}{|#{singular_table_name}| status_tag #{singular_table_name}.#{attr.name}}"
+            else                                "  #    row(:#{attr.name})#{' ' * (ACTIVEADMIN_INDENT_SPACES-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"
+          end
+        end.join("\n")
+      end
+      def attributes_to_aa_filter(attributes)
+        attributes.map{|attr| "  #filter :#{attr.name}"}.join("\n")
+      end
+      def attributes_to_aa_form(attributes)
+        attributes.map do |attr|
+          case attr.type
+            when :date                then  "  #    f.input :#{attr.name}, as: :datepicker, input_html: { class: 'calendar' }"
+            else                            "  #    f.input :#{attr.name}"
+          end
+        end.join("\n")
+      end
+      def attributes_to_aa_csv(attributes)
+        attributes.map{|attr| "  #  column(:#{attr.name})#{' ' * (ACTIVEADMIN_INDENT_SPACES-attr.name.size).abs}{|#{singular_table_name}| #{singular_table_name}.#{attr.name}}"}.join("\n")
+      end
+    end
   end
 
 end

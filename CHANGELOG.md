@@ -1,3 +1,9 @@
+0.8.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.7.0...v0.8.0) February 17th, 2016
+------------------------------
+* Permitted params now use the _id suffix for foreign key fields, in this way the parent resourse can be saved
+* Improved the dsl generated for active admin
+* Improved tests
+
 0.7.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.6.1...v0.7.0) February 16th, 2016
 ------------------------------
 * resources are now being created with dsl activeadmin like boilerplate parameter
