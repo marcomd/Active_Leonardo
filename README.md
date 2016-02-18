@@ -30,18 +30,26 @@ You can also get it from the gem root folder
 
 Once you install the gem, the generators will be available to all Rails applications on your system.
 
-To run the generator, go to your rails project directory and type:
+To run the generator, go to your rails project directory and type to generate the layout:
 
-    rails generate leolay || rails destroy leolay
-    rails generate leosca || rails destroy leosca
+    rails generate leolay
 
-You can run it more times and right like scaffold, it's smart and won't generate tons of identical code (thanks thor)
+Then type to generate the resource:
 
-**Warning**: Leosca destroy do not remove variables parts inserted into feed like time values.
+    rails generate leosca
+
+You can revert:
+
+    rails destroy leosca
+
+You can generate and destroy more times until you will get your prototype.
+
+Read the follow _Step by step_ paragraph and the next _Massive resources generation_
+
 
 ### Step by step
 
-1.  Firstly, create layout and initialize your project:
+1.  Create the app and the layout:
 
         rails new ActiveLeo -m YOUR_TEMPLATE_PATH (see above: install paragraph)
 
@@ -87,7 +95,7 @@ You can run it more times and right like scaffold, it's smart and won't generate
     There is a fourth profile for _guest_ users who can only see the data. In addition to these you can create all the profiles you need according to cancan rules.
 
 
-3.  Create your resource:
+3.  Create your resource as this example:
 
         rails g leosca product name:string description:text active:boolean items:integer price:decimal
 
@@ -98,44 +106,16 @@ You can run it more times and right like scaffold, it's smart and won't generate
     3. seeds will be created for you to populate new table
     4. invoke active admin generator to add the new resource with a custom configuration to work with cancan
 
+Draper is not directly supported but if you have installed it will be triggers in the resource generation chain.
 
-4.  Apply to db as always you do:
+4.  Apply to db:
 
         rake db:migrate
         rake db:seed
 
 That's all!
-The new application is ready to be customized to suit your needs:
 
-* start to develop user front end
-* take advantage of active admin and its dsl to quickly setup administration section
-
-
-
-You could also customize leonardo templates both views and controller.
-To copy under your project folder run:
-
-    rails g leosca:install
-
-Then go to
-
-    lib\generators\erb
-
-to edit erb views like you would do with original scaffold.
-Go to
-
-    lib\generators\rails
-
-if you want to customize more.
-
-
-For more information about usage:
-
-    rails g leolay --help
-    rails g leosca --help
-
-
-### Example:
+### Other examples:
 
 leolay:
 
@@ -148,20 +128,19 @@ leosca:
     rails generate leosca product name:string --skip-seeds
     rails generate leosca product name:string --seeds=60          => if you need more records
 
-if you made a mistake and want to start from scratch just replace generate with destroy to remove all files and inserted code
 
-Of course, these options are in addition to those provided by the original scaffold
+## Massive resources generation
 
-### Massive resources generation's
+Write the resources you want to generate into the file **scaffold.txt** and put it in the _root_.
+A line for every resource, starting from the beginning with the name as you would do with the scaffold.
 
-Write the resources you want to generate into the file scaffold.txt in the root app.
-A line for every resource, starting from the beginning with the name as you would with the scaffold.
 If the line is not a resource but another generator, you can simply starting with the full rails command.
+
 Example:
 
-    # This is the main resource... i think
+    # This is the main resource... (but i could change my mind)
     activity user:references name:string{100} body:text completed:boolean percentage_progression:integer{1}
-    #completed: when all tasks are completed
+    # completed: when all sub tasks are completed
     # Any other comments about fields
 
     # This table acts as...
@@ -198,6 +177,30 @@ of course you can even revert:
 This is very useful for a rapid prototyping and if you keep it updated you can use it as information center about the database.
 
 _If you try that example remember to add the traslation of the two field foo and bar (added by migrations), otherwise you will get a translation error._
+
+## Customization
+
+You could also customize leonardo templates both views and controller.
+To copy under your project folder run:
+
+    rails g leosca:install
+
+Then go to
+
+    lib\generators\erb
+
+to edit erb views like you would do with original scaffold.
+Go to
+
+    lib\generators\rails
+
+if you want to customize more.
+
+
+For more information about usage:
+
+    rails g leolay --help
+    rails g leosca --help
 
 ### Available layout
 
@@ -263,27 +266,29 @@ rake active:tests:newapp[inspection,4.2]
 
 Do **NOT** exec rake tests from bundle to avoid its bubble.
 
-## Ruby 1.9
+## Compatibility with older versions
+
+#### Ruby 1.9
 
 Supported until 0.6.x version
 
 
-## Rails 3.2.x
+#### Rails 3.2.x
 
 Supported until 0.6.x version
 
 
-## Rails 3.1.x
+#### Rails 3.1.x
 
 It should work but has not been tested
 
 
-## Rails 2 and Rails 3.0.x
+#### Rails 2 and Rails 3.0.x
 
 This Generators does not work with versions earlier 3.1
 
 
-## Tutorial
+## Other informations
 
 Visit my [Blog](http://en-marcomastrodonato.blogspot.it/2012/08/create-management-app-with-activeadmin-rails.html/)
 

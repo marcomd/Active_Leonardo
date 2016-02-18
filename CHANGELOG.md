@@ -1,3 +1,8 @@
+0.8.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.8.0...v0.8.1) February 18th, 2016
+------------------------------
+* Improved the documentation
+* Fixed a bug on the travis test
+
 0.8.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.7.0...v0.8.0) February 17th, 2016
 ------------------------------
 * Permitted params now use the _id suffix for foreign key fields, in this way the parent resourse can be saved

@@ -47,9 +47,9 @@ namespace :active do
                                               "bundle exec rake db:migrate",
                                               "bundle exec rake db:seed"
         ]
-        commands << "delete #{File.join(test_folder,app_name)}"  unless inspection
-        commands << "delete #{log_path}"  unless inspection
-        # commands << "#CHDIR #{root_path}"
+        commands << "#CHDIR #{root_path}"
+        commands << "#DELETE #{File.join(test_folder,app_name)}"  unless inspection
+        commands << "#DELETE #{log_path}"  unless inspection
 
         regexp_special_cmd = '#\w+\s'
         puts "Dir.pwd #{Dir.pwd}"
