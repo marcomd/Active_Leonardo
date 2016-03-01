@@ -18,9 +18,9 @@ class LeolayGenerator < Rails::Generators::Base
   class_option :verbose,        :type => :boolean,  :default => true,   :desc => "Run interactive mode"
 
   def generate_layout
-    template "styles/#{style_name}/stylesheets/app/stylesheet.scss",          "app/assets/stylesheets/#{style_name}.scss"
-    template "styles/#{style_name}/stylesheets/app/custom_active_admin.scss", "app/assets/stylesheets/custom_active_admin.scss"
-    template "styles/#{style_name}/stylesheets/app/_enviroment.scss",         "app/assets/stylesheets/_enviroment.scss"
+    template "styles/#{style_name}/stylesheets/app/stylesheet.scss.erb",          "app/assets/stylesheets/#{style_name}.scss.erb"
+    template "styles/#{style_name}/stylesheets/app/custom_active_admin.scss.erb", "app/assets/stylesheets/custom_active_admin.scss.erb"
+    template "styles/#{style_name}/stylesheets/app/_production.scss",             "app/assets/stylesheets/_production.scss"
 
     copy_file "app/helpers/layout_helper.rb",     "app/helpers/layout_helper.rb",           :force => !options.verbose?
     directory "styles/#{style_name}/images",      "app/assets/images/styles/#{style_name}", :force => !options.verbose?
@@ -101,7 +101,7 @@ class LeolayGenerator < Rails::Generators::Base
     inject_into_class file, auth_class do
       <<-FILE.gsub(/^    /, '')
       ROLES = %w[admin manager user guest]
-      scope :with_role, lambda { |role| {:conditions => "roles_mask & \#{2**ROLES.index(role.to_s)} > 0 "} }
+      scope :with_role, ->(role) { where("roles_mask & \#{2**ROLES.index(role.to_s)} > 0 ") }
 
       def roles=(roles)
         self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
@@ -124,12 +124,19 @@ class LeolayGenerator < Rails::Generators::Base
       def admin?
         self.role? 'admin'
       end
-      def name
+      def name option=:fullname
         return unless self.email
         # Get left email text
         match_data = self.email.match(/^([a-z]+)(\.|\-|\_|)([a-z]+|)/i)
-        name = "\#{match_data[1].capitalize}"
-        name << " \#{match_data[3].capitalize}" unless match_data[3].blank?
+        case option
+          when :full, :fullname
+            name = match_data[1].capitalize
+            name << " \#{match_data[3].capitalize}" unless match_data[3].blank?
+          when :first, :firstname
+            name = match_data[1].capitalize
+          when :last, :lastname, :surname
+            name = match_data[3].capitalize
+        end
         name
       end
       FILE

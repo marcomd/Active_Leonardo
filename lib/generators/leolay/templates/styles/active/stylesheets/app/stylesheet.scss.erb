@@ -1,8 +1,10 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
+<% if Rails.env == 'production' %>
+@import "production";
+<% end %>
 
 body.active_admin {
-  @import "enviroment";
   @import "active_admin/pages/logged_out";
   #header {
     #session {
@@ -26,28 +28,12 @@ body.active_admin {
   #login {
     form {
       input[type=text], input[type=password], input[type=email], input[type=url], input[type=tel], textarea {
-        //width: 76%;
-        //border: 1px solid #c9d0d6;
-        //@include rounded;
-        //font-size: 0.95em;
-        //@include sans-family;
-        //outline: none;
         padding: 8px 7px;
-
-        //&:focus {
-        //  border: 1px solid #99a2aa;
-        //  @include shadow(0,0,4px,#99a2aa);
-        //}
       }
       input[type=submit] {
         @include dark-button;
         margin-left: 20px;
-        //padding: 4px 8px;
       }
-      //.buttons {
-      //  margin-top: 15px;
-      //  //input[type=submit] { margin-right: 10px; }
-      //}
     }
   }
 }

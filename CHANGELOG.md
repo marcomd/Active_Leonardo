@@ -1,3 +1,9 @@
+0.9.0 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.8.1...v0.9.0) March 1th, 2016
+------------------------------
+* Different style for production env
+* Improved email to name in the user model
+* User.with_role(:role) now works on rails 4+
+
 0.8.1 [☰](https://github.com/marcomd/Active_Leonardo/compare/v0.8.0...v0.8.1) February 18th, 2016
 ------------------------------
 * Improved the documentation

@@ -1,10 +1,11 @@
 $style_path: styles/<%= style_name %>;
 @import "active_admin/mixins";
 @import "active_admin/base";
+<% if Rails.env == 'production' %>
+@import "production";
+<% end %>
 
 body.active_admin {
-  @import "enviroment";
-
   #active_admin_content {
     padding: 10px 10px;
   }
